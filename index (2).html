@@ -1,0 +1,1398 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>كتاب العيش في حياة تخالف المألوف - أسيل العطار</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,400&family=Aref+Ruqaa:wght@400;700&family=Reem+Kufi:wght@500;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        :root {
+            --desk-bg: radial-gradient(circle at center, #1b2431 0%, #0c1017 100%);
+            --paper-creamy: #fcf9f2;
+            --paper-border: #ebdcc3;
+            --paper-edge: #d9c8aa;
+            --ink-primary: #242426;
+            --ink-heading: #142a42;
+            --accent-gold: #c59b3f;
+            --accent-gold-dark: #977123;
+            --page-shadow: rgba(0, 0, 0, 0.45);
+            --font-book: 'Amiri', serif;
+            --font-heading: 'Aref Ruqaa', serif;
+            --font-ui: 'Reem Kufi', sans-serif;
+            --font-size: 18px;
+        }
+
+        body.mode-night {
+            --desk-bg: radial-gradient(circle at center, #111419 0%, #06080b 100%);
+            --paper-creamy: #1a2029;
+            --paper-border: #2d3748;
+            --paper-edge: #232b38;
+            --ink-primary: #e6edf3;
+            --ink-heading: #89b4e6;
+            --accent-gold: #e2b963;
+            --accent-gold-dark: #b88d36;
+            --page-shadow: rgba(0, 0, 0, 0.8);
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            background: var(--desk-bg);
+            color: var(--ink-primary);
+            font-family: var(--font-book);
+            font-size: var(--font-size);
+            overflow: hidden;
+            height: 100vh;
+            width: 100vw;
+            user-select: none;
+            -webkit-user-select: none;
+            touch-action: pan-y;
+        }
+
+        .stage-3d {
+            perspective: 2600px;
+            width: 100vw;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+
+        .book-binder {
+            position: relative;
+            width: min(94vw, 540px);
+            height: min(85vh, 800px);
+            transform-style: preserve-3d;
+            transition: transform 0.6s cubic-bezier(0.2, 0.8, 0.25, 1);
+            filter: drop-shadow(0 25px 35px var(--page-shadow));
+        }
+
+        .book-block-edge {
+            position: absolute;
+            top: 6px;
+            bottom: 6px;
+            left: -10px;
+            width: 14px;
+            background: repeating-linear-gradient(
+                to right,
+                var(--paper-border),
+                var(--paper-border) 1px,
+                var(--paper-edge) 2px,
+                var(--paper-creamy) 3px
+            );
+            border-radius: 4px 0 0 4px;
+            box-shadow: inset -4px 0 6px rgba(0,0,0,0.35);
+            z-index: 1;
+            transform: translateZ(-2px);
+        }
+
+        .book-spine-binding {
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            right: -12px;
+            width: 20px;
+            background: linear-gradient(to left, #0e1c2b, #1d344d 40%, #0d1a29 80%, #09131d 100%);
+            border-radius: 0 8px 8px 0;
+            box-shadow: 6px 0 18px rgba(0,0,0,0.6), inset -2px 0 4px rgba(255,255,255,0.15);
+            z-index: 5;
+            transform: translateZ(2px);
+        }
+
+        .book-leaf {
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 100%;
+            height: 100%;
+            transform-origin: right center;
+            transform-style: preserve-3d;
+            transition: transform 0.85s cubic-bezier(0.25, 1, 0.35, 1);
+            cursor: pointer;
+        }
+
+        .book-leaf.flipped {
+            transform: rotateY(180deg);
+        }
+
+        .leaf-page {
+            position: absolute;
+            inset: 0;
+            backface-visibility: hidden;
+            -webkit-backface-visibility: hidden;
+            background-color: var(--paper-creamy);
+            border-radius: 4px 10px 10px 4px;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            box-sizing: border-box;
+            box-shadow: inset 0 0 45px rgba(0,0,0,0.04);
+        }
+
+        .leaf-page.page-front {
+            transform: rotateY(0deg);
+            border-right: 1px solid rgba(0, 0, 0, 0.15);
+            box-shadow: inset 24px 0 35px -12px rgba(0, 0, 0, 0.12), inset -2px 0 6px rgba(0, 0, 0, 0.04);
+        }
+
+        .leaf-page.page-back {
+            transform: rotateY(180deg);
+            border-left: 1px solid rgba(0, 0, 0, 0.15);
+            border-radius: 10px 4px 4px 10px;
+            box-shadow: inset -24px 0 35px -12px rgba(0, 0, 0, 0.12), inset 2px 0 6px rgba(0, 0, 0, 0.04);
+        }
+
+        .cover-hard {
+            background: linear-gradient(135deg, #0d1e33 0%, #152942 50%, #0b1828 100%);
+            border: 2px solid #8e6c28;
+        }
+
+        .curl-shine {
+            position: absolute;
+            inset: 0;
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity 0.5s ease;
+            background: linear-gradient(90deg, rgba(255,255,255,0) 0%, rgba(255,255,255,0.4) 50%, rgba(0,0,0,0.3) 100%);
+            z-index: 10;
+        }
+
+        .book-leaf.curling .curl-shine {
+            opacity: 1;
+        }
+
+        .page-scrollable {
+            padding: 36px 32px 70px 32px;
+            height: 100%;
+            overflow-y: auto;
+            overflow-x: hidden;
+            line-height: 2.1;
+            text-align: justify;
+            text-justify: inter-word;
+            scrollbar-width: thin;
+            scrollbar-color: var(--accent-gold) transparent;
+        }
+
+        @media (max-width: 640px) {
+            .page-scrollable {
+                padding: 22px 18px 80px 18px;
+                line-height: 1.9;
+            }
+        }
+
+        .page-scrollable::-webkit-scrollbar {
+            width: 4px;
+        }
+        .page-scrollable::-webkit-scrollbar-thumb {
+            background-color: var(--accent-gold);
+            border-radius: 4px;
+        }
+
+        .book-header-line {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            font-family: var(--font-ui);
+            font-size: 0.72rem;
+            color: var(--accent-gold-dark);
+            border-bottom: 1px solid var(--paper-border);
+            padding-bottom: 8px;
+            margin-bottom: 20px;
+            opacity: 0.85;
+        }
+
+        .book-footer-line {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 44px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 28px;
+            font-family: var(--font-heading);
+            font-size: 0.9rem;
+            color: var(--accent-gold);
+            background: linear-gradient(to top, var(--paper-creamy) 80%, rgba(252,249,242,0) 100%);
+            border-top: 1px dashed rgba(197, 155, 63, 0.25);
+            pointer-events: none;
+        }
+
+        h2.title-chapter {
+            font-family: var(--font-heading);
+            color: var(--accent-gold-dark);
+            text-align: center;
+            font-size: 1.9rem;
+            margin: 0 0 6px 0;
+            line-height: 1.3;
+        }
+
+        .badge-chapter {
+            font-family: var(--font-heading);
+            color: var(--accent-gold);
+            text-align: center;
+            font-size: 1.3rem;
+            margin-bottom: 4px;
+        }
+
+        .chapter-subhead {
+            font-family: var(--font-ui);
+            color: var(--ink-heading);
+            text-align: center;
+            font-size: 1rem;
+            margin-bottom: 22px;
+            opacity: 0.9;
+        }
+
+        .callout-wisdom {
+            background: linear-gradient(135deg, rgba(197,155,63,0.12) 0%, rgba(197,155,63,0.02) 100%);
+            border-right: 4px solid var(--accent-gold);
+            padding: 14px 18px;
+            margin: 20px 0;
+            border-radius: 4px;
+            color: var(--ink-heading);
+            font-weight: 700;
+            line-height: 1.9;
+            font-size: 1.02em;
+        }
+
+        .silk-bookmark {
+            position: absolute;
+            top: -12px;
+            right: 70px;
+            width: 22px;
+            height: 90px;
+            background: linear-gradient(180deg, #991b1b 0%, #b91c1c 85%, transparent 100%);
+            box-shadow: 2px 5px 12px rgba(0,0,0,0.5);
+            z-index: 40;
+            clip-path: polygon(0 0, 100% 0, 100% 85%, 50% 100%, 0 85%);
+            transition: transform 0.3s ease;
+            cursor: pointer;
+        }
+
+        .tactile-dock {
+            position: fixed;
+            bottom: 16px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(15, 23, 42, 0.9);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(217, 180, 100, 0.28);
+            border-radius: 36px;
+            padding: 6px 14px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 8px;
+            width: min(94vw, 460px);
+            box-shadow: 0 12px 36px rgba(0, 0, 0, 0.5);
+            z-index: 90;
+        }
+
+        .dock-pill-btn {
+            background: transparent;
+            border: none;
+            color: #f1e4c3;
+            font-family: var(--font-ui);
+            font-size: 0.9rem;
+            padding: 8px 12px;
+            border-radius: 20px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            transition: all 0.25s ease;
+        }
+        .dock-pill-btn:hover:not(:disabled) {
+            background: rgba(197, 155, 63, 0.25);
+            color: #ffffff;
+        }
+        .dock-pill-btn:disabled {
+            opacity: 0.35;
+            cursor: not-allowed;
+        }
+
+        .dock-icon-action {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            background: rgba(255, 255, 255, 0.06);
+            color: #d8c292;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .dock-icon-action:hover {
+            background: var(--accent-gold);
+            color: #0d1219;
+            transform: scale(1.08);
+        }
+
+        #tocDrawer {
+            position: fixed;
+            inset: 0;
+            background: rgba(5, 8, 12, 0.75);
+            backdrop-filter: blur(8px);
+            z-index: 100;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.35s ease;
+            display: flex;
+            justify-content: center;
+            align-items: flex-end;
+        }
+        #tocDrawer.open {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .toc-paper-sheet {
+            background: var(--paper-creamy);
+            width: min(96vw, 520px);
+            height: 75vh;
+            border-radius: 24px 24px 0 0;
+            box-shadow: 0 -15px 40px rgba(0,0,0,0.5);
+            display: flex;
+            flex-direction: column;
+            transform: translateY(100%);
+            transition: transform 0.4s cubic-bezier(0.18, 0.89, 0.32, 1);
+            border-top: 3px solid var(--accent-gold);
+        }
+        #tocDrawer.open .toc-paper-sheet {
+            transform: translateY(0);
+        }
+    </style>
+</head>
+<body>
+
+    <div class="stage-3d" id="bookStage">
+        <div class="book-binder" id="bookBinder">
+            <div class="book-spine-binding"></div>
+            <div class="book-block-edge"></div>
+            <div class="silk-bookmark" onclick="toggleToc(true)" title="فهرس الكتاب"></div>
+            <div id="leavesContainer" class="w-full h-full relative"></div>
+        </div>
+    </div>
+
+    <nav class="tactile-dock" aria-label="شريط التحكم في الكتاب">
+        <button id="btnNext" onclick="turnNext()" class="dock-pill-btn" title="الصفحة التالية">
+            <span>التالي</span>
+            <svg class="w-4 h-4 rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5l7 7-7 7"/></svg>
+        </button>
+
+        <div class="flex items-center gap-1.5">
+            <button onclick="toggleToc(true)" class="dock-icon-action" title="الفهرس الكامل">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h9"/></svg>
+            </button>
+            <button onclick="toggleTheme()" class="dock-icon-action" title="وضع القراءة الليلي">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"/></svg>
+            </button>
+            <button onclick="adjustFont()" class="dock-icon-action font-bold text-xs" title="حجم الخط">
+                <span>عَـ</span>
+            </button>
+        </div>
+
+        <button id="btnPrev" onclick="turnPrev()" class="dock-pill-btn" title="الصفحة السابقة">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5l7 7-7 7"/></svg>
+            <span>السابق</span>
+        </button>
+    </nav>
+
+    <div id="tocDrawer" onclick="if(event.target===this) toggleToc(false)">
+        <div class="toc-paper-sheet">
+            <div class="p-4 border-b border-amber-900/10 flex items-center justify-between">
+                <div class="flex items-center gap-2">
+                    <span class="w-2.5 h-6 bg-amber-600 rounded-full"></span>
+                    <h3 class="font-bold text-lg text-amber-950 font-['Reem_Kufi']">فهرس الكتاب الكامل</h3>
+                </div>
+                <button onclick="toggleToc(false)" class="p-1 rounded-full text-slate-500 hover:bg-slate-200">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+                </button>
+            </div>
+            
+            <div id="tocList" class="flex-1 overflow-y-auto p-3 divide-y divide-amber-900/10"></div>
+            
+            <div class="p-3 bg-amber-950/5 text-xs text-center text-amber-900/70 font-['Amiri'] border-t border-amber-900/10">
+                كتاب "العيش في حياة تخالف المألوف" • تأليف أسيل العطار
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const BOOK_DATA = [
+            {
+                id: 0,
+                type: "cover",
+                title: "الغلاف الأصلي",
+                subhead: "واجهة الكتاب",
+                render: function() {
+                    return `
+                    <div class="w-full h-full relative flex flex-col justify-between p-6 text-center overflow-hidden">
+                        <div class="absolute inset-0 z-0">
+                            <svg class="w-full h-full object-cover" viewBox="0 0 400 620" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <defs>
+                                    <radialGradient id="sunLight" cx="50%" cy="53%" r="48%">
+                                        <stop offset="0%" stop-color="#fff8d1"/>
+                                        <stop offset="35%" stop-color="#f59e0b" stop-opacity="0.85"/>
+                                        <stop offset="70%" stop-color="#b45309" stop-opacity="0.4"/>
+                                        <stop offset="100%" stop-color="#0a1829" stop-opacity="0"/>
+                                    </radialGradient>
+                                    <linearGradient id="pathGold" x1="50%" y1="95%" x2="50%" y2="52%">
+                                        <stop offset="0%" stop-color="#fef08a"/>
+                                        <stop offset="55%" stop-color="#f59e0b"/>
+                                        <stop offset="100%" stop-color="#b45309"/>
+                                    </linearGradient>
+                                </defs>
+                                <rect width="400" height="620" fill="#0f2238"/>
+                                <circle cx="70" cy="80" r="1.5" fill="#fef08a"/>
+                                <circle cx="330" cy="65" r="2" fill="#fef08a"/>
+                                <circle cx="205" cy="105" r="1.5" fill="#fde68a"/>
+                                <circle cx="340" cy="150" r="2.5" fill="#f59e0b"/>
+                                <path d="M-10,340 L80,290 L180,335 L260,295 L340,325 L420,300 L420,450 L-10,450 Z" fill="#13263e"/>
+                                <path d="M-20,355 L110,320 L210,360 L320,310 L430,340 L430,460 L-20,460 Z" fill="#1c3654"/>
+                                <circle cx="200" cy="325" r="110" fill="url(#sunLight)"/>
+                                <path d="M-20,410 Q90,360 200,390 T420,380 L420,620 L-20,620 Z" fill="#78350f" opacity="0.65"/>
+                                <path d="M-20,440 Q130,400 240,430 T430,410 L430,620 L-20,620 Z" fill="#92400e" opacity="0.8"/>
+                                <path d="M200,335 C190,360 270,390 250,420 C220,455 120,470 140,515 C160,560 300,565 240,625 L160,625 C200,575 80,560 70,510 C60,455 170,445 190,415 C210,385 140,365 200,335 Z" fill="url(#pathGold)"/>
+                                <g transform="translate(196, 355) scale(0.7)">
+                                    <circle cx="6" cy="-2" r="3.5" fill="#3b1d11"/>
+                                    <path d="M2,3 L10,3 L11,15 L1,15 Z" fill="#ffffff"/>
+                                    <path d="M1,15 L11,15 L13,34 L-1,34 Z" fill="#9a3412"/>
+                                </g>
+                            </svg>
+                        </div>
+                        <div class="relative z-10 my-auto space-y-2 select-none">
+                            <h1 class="text-3xl sm:text-4xl font-extrabold text-amber-100 font-['Reem_Kufi'] drop-shadow-[0_4px_8px_rgba(0,0,0,0.9)]">العيش في</h1>
+                            <h2 class="text-3xl sm:text-4xl font-extrabold text-amber-200 font-['Reem_Kufi'] drop-shadow-[0_4px_8px_rgba(0,0,0,0.9)]">حياة تخالف</h2>
+                            <div class="text-5xl sm:text-6xl font-black text-transparent bg-clip-text bg-gradient-to-b from-amber-200 via-amber-300 to-amber-500 font-['Aref_Ruqaa'] tracking-wide py-2 drop-shadow-[0_5px_12px_rgba(0,0,0,0.95)]">المَألُوفُ</div>
+                            <div class="pt-3">
+                                <span class="inline-block bg-slate-950/70 backdrop-blur-md px-4 py-1 rounded-full text-amber-200 text-sm font-['Amiri'] font-bold border border-amber-500/40 shadow-lg">رحلة نحو التفرد والشجاعة</span>
+                            </div>
+                        </div>
+                        <div class="relative z-10 pb-2">
+                            <p class="text-amber-100 text-lg font-['Aref_Ruqaa'] font-bold drop-shadow-[0_2px_6px_rgba(0,0,0,0.9)]">بقلم: أسيل العطار</p>
+                        </div>
+                    </div>
+                    `;
+                }
+            },
+            {
+                id: 1,
+                type: "title_page",
+                title: "صفحة العنوان",
+                subhead: "العنوان الرئيسي",
+                render: function() {
+                    return `
+                    <div class="page-scrollable flex flex-col justify-center items-center text-center">
+                        <div class="w-16 h-1 bg-amber-500 rounded-full mb-8"></div>
+                        <h2 class="title-chapter text-3xl sm:text-4xl text-amber-900 font-bold mb-3">العيش في حياة تخالف المألوف</h2>
+                        <h3 class="text-xl sm:text-2xl text-amber-800/80 font-['Aref_Ruqaa'] mb-8">رحلة نحو التفرد والشجاعة</h3>
+                        <div class="w-32 h-[2px] bg-gradient-to-r from-transparent via-amber-600 to-transparent my-6"></div>
+                        <p class="text-2xl font-bold text-amber-700 font-['Aref_Ruqaa']">بقلم: أسيل العطار</p>
+                    </div>
+                    `;
+                }
+            },
+            {
+                id: 2,
+                type: "preface",
+                title: "مقدمة الكتاب",
+                subhead: "المقدمة",
+                render: function() {
+                    return `
+                    <div class="page-scrollable">
+                        <div class="book-header-line">
+                            <span>مقدمة الكتاب</span>
+                            <span>العيش في حياة تخالف المألوف</span>
+                        </div>
+                        <h2 class="title-chapter">مقدمة الكتاب</h2>
+                        <p>هناك لحظات في حياة كل إنسان لا تنسى، ليس لأنها كانت مثالية، بل لأنها كانت بداية لتغير داخلي لا يمكن الرجوع عنه لحظات تشعر فيها أن ما كنت تعتقده ثابتًا لم يعد كذلك، وأن الأسئلة بدأت تسبق الإجابات، وأن الطريق لم يعد واضحًا كما كان من قبل.</p>
+                        <p>هذا الكتاب ليس محاولة لتقديم إجابات جاهزة، ولا هو وصف لطريق واحد صحيح يجب أن يسلكه الجميع، بل هو رحلة شخصية مليئة بالتجارب والتأملات، والتغيرات التي مررت بها من الطفولة إلى لحظة الوعي بما يعنيه أن نعيش حياة مختلفة عن المألوف.</p>
+                        <p>قد تجد بين هذه الصفحات شيئًا يشبهك، أو موقفًا مررت به، أو شعورًا حاولت فهمه طويلا. وقد تجد أيضا أفكارًا تختلف معها، وهذا طبيعي، لأن كل إنسان يرى الحياة من زاويته الخاصة، ويصنع فهمه what is it الخاص لها.</p>
+                        <p>العيش في حياة تخالف المألوف ليس دعوة للخروج عن القواعد بل دعوة للوعي أن تفهم نفسك أولا، وأن تختار طريقك بناء على ما تؤمن به، لا على ما يفرضه الآخرون أو يتوقعونه منك.</p>
+                        <p>هذا الكتاب هو محاولة صادقة للإجابة عن سؤال واحد ظل يرافقني طوال الرحلة</p>
+                        <div class="callout-wisdom">كيف يمكن للإنسان أن يكون نفسه في عالم يحاول باستمرار أن يجعله نسخة من غيره؟</div>
+                        <p>أتمنى أن تكون هذه الصفحات بداية لفكرة، أو شعور، أو تغيير صغير في طريقة نظرتك للحياة، لأن التغييرات الكبيرة غالبا تبدأ من تفاصيل صغيرة جدا.</p>
+                    </div>
+                    `;
+                }
+            },
+            {
+                id: 3,
+                type: "story",
+                title: "قصة مرآة خلف السياج...",
+                subhead: "قصة رمزية",
+                render: function() {
+                    return `
+                    <div class="page-scrollable">
+                        <div class="book-header-line">
+                            <span>قصة رمزية</span>
+                            <span>مرآة خلف السياج</span>
+                        </div>
+                        <h2 class="title-chapter">قصة مرآة خلف السياج...</h2>
+                        <p class="font-bold text-amber-800 text-lg">في بعض الليالي، لا يزورنا الماضي على هيئة ذكريات، بل على هيئة أشخاص ........</p>
+                        <p>في تلك الليلة، كانت ساره تجلس وحدها في مكتبها بعد يوم طويل. كانت الأوراق تملأ الطاولة، والهدوء يملأ الغرفة، لكن شيئًا في داخلها كان صاحبا على غير العادة.</p>
+                        <p>رفعت ساره رأسها عن العمل عندما لمحت حركة في زاوية الغرفة.</p>
+                        <p>كانت هناك طفلة تجلس على سجادة قديمة منشغلة بالرسم وكأنها موجودة منذ البداية.</p>
+                        <p>حدقت ساره فيها لثوان طويلة، قبل أن تدرك الحقيقة المربكة ...?</p>
+                        <p class="font-bold text-amber-700">كانت تنظر إلى نفسه !!</p>
+                        <p>المكان: غرفة المكتب باردة الإضاءة. كانت تجلس ساره المرأة أمام مكتبها المكدس بالأوراق والملفات. في زاوية الغرفة فوق سجادة قديمة، تجلس ساره الطفلة بثوبها الملون ويديها الملطختين بالألوان.</p>
+                        <p>كانت الطفلة ترسم شجرة بأوراق بنفسجية دون أن ترفع نظرها، ثم قالت بهدوء: "لماذا تبدين متعبة هكذا ؟ هل أزعجك أحد ؟"</p>
+                        <p>نظرت المرأة إليها طويلا، ثم ابتسمت ابتسامة خفيفة فيها حزن وتعب قديم وقالت: "ليس تماما. أنا متعبة لأنني قضيت سنوات طويلة أحاول أن أكون الشخص الذي يريده الجميع، حتى نسيت من أريد أنا أن أكون."</p>
+                        <p>أكملت الطفلة الرسم وسألت سؤال بسيط أكثر مما ينبغي: " ولماذا تفعلين ذلك؟ أنا أرسم ما أحب، وأقول ما أفكر فيه."</p>
+                        <p>تنفست المرأة ببطء، وكأنها تبحث عن إجابة تأخرت كثيرا وقالت: "لأنهم كانوا يقولون إن الفتاة الجيدة يجب أن تكون هادئة مطيعة، وتسير في الطريق المرسوم لها. كانوا يخافون علي، لكن خوفهم تحول مع الوقت إلى جدران حول أحلامي."</p>
+                        <p>نظرت الطفلة إلى رسمتها ثم قالت: "لكن أليس من المفترض أن يحبنا الناس كما نحن؟"</p>
+                        <p>أجابت المرأة بصوت أخف: "هذا ما كنت أؤمن به لكنني تعلمت مبكرًا أن القبول أحيانًا يأتي بشروط. شروط صغيرة في البداية، ثم تكبر شيئًا فشيئًا حتى تصبح حياة كاملة نعيشها لإرضاء الآخرين."</p>
+                        <p>سكتت لحظة، ثم أضافت: "في كل مرة كنت أصل فيها إلى هدف جديد كنت أشعر أن شيئًا ما ينقصني ... شيئًا يشبهك أنت."</p>
+                        <p>رفعت الطفلة رأسها وقالت ببساطة: "أنا ما زلت هنا."</p>
+                        <p>أغمضت المرأة عينيها للحظة: "أعرف... لهذا عدت إليك اليوم. أردت أن أعتذر لأنني تركتك وحدك كل هذه السنوات لأنني صدقت أن الاختلاف خطأ، وأن التشبه بالآخرين هو الطريق الوحيد للنجاح."</p>
+                        <p>نهضت الطفلة من مكانها، ومدت فرشاة الرسم قائلة: "خذيها."</p>
+                        <p>"وماذا أفعل بها؟"</p>
+                        <p>"ارسمي حياتك من جديد ليس كما يريدها الآخرون، بل كما ترينها أنت. لا أحد يستطيع أن يعيش قصتك بدلا منك."</p>
+                        <p>ارتجفت يد المرأة وهي تأخذ الفرشاة: "وماذا لو تأخرت؟"</p>
+                        <p>ابتسمت الطفلة، وبدأ حضورها يبهت شيئًا فشيئًا وقبل أن تختفي تماما، قالت: "لا يتأخر الإنسان عن نفسه أبدا. بعضنا يحتاج سنوات طويلة حتى يتذكر من كان حقا ."</p>
+                        <p>ثم اختفت. ساد الصمت في الغرفة. وعندما رفعت ساره رأسها، لم تجد الطفلة أمامها. لكن الفرشاة بقيت في يدها .! ولأول مرة منذ سنوات، شعرت أن الطريق الذي تبحث عنه لم يكن أمامه بل كان بداخلها "</p>
+                        <p>في النهاية، لم يكن ما حدث في تلك الغرفة حدثاً خارقا، ولا لحظة درامية تغير كل شيء دفعة واحدة. كان مجرد تذكر. تذكر متأخر لم يكون واضحًا منذ البداية، لكن الحياة غطته بالتفاصيل والواجبات والتوقعات.</p>
+                        <p class="font-bold text-amber-800">" وأخيرا أن العودة إلى النفس ليست رجوعا ... بل بداية "</p>
+                        <div class="callout-wisdom">الحياة التي تخالف المألوف لا تبدأ بخطوة كبيرة ... بل تبدأ عندما تتوقفين عن الاعتذار لأنك مختلفة.</div>
+                    </div>
+                    `;
+                }
+            },
+            {
+                id: 4,
+                type: "chapter",
+                num: "1",
+                badge: "-(1)-",
+                title: "الفصل الأول: الطفولة",
+                subhead: "الفصل الأول",
+                render: function() {
+                    return `
+                    <div class="page-scrollable">
+                        <div class="book-header-line">
+                            <span>الفصل الأول</span>
+                            <span>الطفولة</span>
+                        </div>
+                        <div class="badge-chapter">-(1)-</div>
+                        <h2 class="title-chapter">الطفولة</h2>
+                        <div class="chapter-subhead">الفصل الأول</div>
+                        <p class="font-bold text-amber-800 text-center pb-2">قبل أن أعرف معنى الاختلاف كنت أعيشه.</p>
+                        <p>في السنوات الأولى من العمر لا يدرك الطفل أنه يسير في طريق قد يبتعد يوما عن الطرق التي يسلكها الآخرون. كان العالم يبدو واسعا، مليئًا بالأسئلة أكثر من الإجابات، وبالأحلام أكثر من الحدود. كنت أراقب ما حولي وأشعر أن هناك شيئًا أبعد مما يراه الجميع شيئًا لا يمكن وصفه بسهولة، لكنه كان حاضرا في داخلي منذ البداية.</p>
+                        <p>الطفولة ليست مجرد ذكريات متناثرة نحتفظ بها في زوايا العقل بل هي الجذور الخفية لكل ما نصبح عليه لاحقا. هناك تتشكل نظرتنا الأولى للحياة، وهناك نتعلم الخوف والشجاعة القبول والرفض، والانتماء والاختلاف. وفي تلك المرحلة المبكرة بدأت رحلتي دون أن أدرك أنها ستكون رحلة بعيدة عن المألوف.</p>
+                        <p>لم تكن الأحداث العظيمة هي التي صنعتني بل التفاصيل الصغيرة الأسئلة التي لم أجد لها جوابا، اللحظات التي شعرت فيها أنني مختلف، والأفكار التي لم أستطع مشاركتها مع أحد كانت تلك البدايات الهادئة ترسم ملامح الطريق الذي سأمشي فيه لاحقا.</p>
+                        <p>هذا الفصل ليس محاولة للعودة إلى الماضي بقدر ما هو محاولة لفهمه. لأن الإنسان مهما ابتعد في رحلته يبقى يحمل داخله ذلك الطفل الذي شهد البداية الأولى ... وتبقى الطفوله هي البصمه الموجودة داخل كل إنسان وكلما تقدم في العمر كلما اشتاق إلى تلك الأيام .</p>
+                        <p>كانت الطفولة تشبه صباحًا هادئا كل شيء فيها يبدو بسيطا، والابتسامة تأتي بلا سبب، والأحلام لا تعرف المستحيل، لكن مع مرور السنوات، أدركت أن النضوج ليس مرحلة تصل إليها فجأة، بل رحلة طويلة تبدأ عندما نتوقف عن رؤية الحياة كما نريدها، ونبدأ برؤيتها كما هي.</p>
+                    </div>
+                    `;
+                }
+            },
+            {
+                id: 5,
+                type: "chapter",
+                num: "2",
+                badge: "",
+                title: "الفصل الثاني: مرحلة النضوج",
+                subhead: "الفصل الثاني",
+                render: function() {
+                    return `
+                    <div class="page-scrollable">
+                        <div class="book-header-line">
+                            <span>الفصل الثاني</span>
+                            <span>مرحلة النضوج</span>
+                        </div>
+                        <h2 class="title-chapter">مرحلة النضوج</h2>
+                        <div class="chapter-subhead">الفصل الثاني</div>
+                        <p>لم يكن النضوج يوما مرتبطا بالعمر فقط، بل كان سلسلة من المواقف التي غيرت طريقة رؤيتي للحياة. في مرحلة الطفولة كنت أرى العالم بسيطا، مليئًا بالألوان والأحلام، أما عندما بدأت أكبر اكتشفت أن الحياة ليست كما تخيلتها. أصبحت القرارات أثقل، والمسؤوليات أكبر، والتجارب أكثر عمقا.</p>
+                        <p>في هذه المرحلة بدأت أتعلم أن كل تجربة، سواء كانت جميلة أو مؤلمة، كانت تبني جزءا جديدًا من شخصيتي. لم يعد السؤال: "ماذا أريد؟" فقط، بل أصبح: "من أريد أن أكون؟"</p>
+                        <p class="font-bold text-amber-800">وهنا بدأت رحلتي الحقيقية نحو حياة تخالف المألوف....</p>
+                        <p>أول موقف غير نظرتي للحياة لم يكن الأكبر أو الأصعب، لكنه كان كافيا ليجعلني أفهم أن الواقع لا يسير دائما وفق توقعاتنا اكتشفت أن الخسارة جزء من النجاح، وأن الانكسار قد يكون بداية لقوة لم أكن أعرف أنها موجودة داخلي منذ تلك اللحظة، لم أعد الشخص نفسه.</p>
+                        <p>ثم جاءت المسؤولية، ذلك الضيف الذي لا يستأذن أحدًا. أصبحت قراراتي تؤثر في مستقبلي، ولم يعد بإمكاني أن أحمل الظروف أو الآخرين نتائج اختياراتي تعلمت أن الحرية الحقيقية لا تعني أن أفعل ما أشاء، بل أن أتحمل نتائج ما أختاره.</p>
+                        <p>وخلال هذه الرحلة ارتكبت أخطاء كثيرة. في البداية كنت أنظر إليها كعلامات فشل لكنني اكتشفت مع الوقت أنها كانت معلمي الحقيقي. كل خطأ كشف لي جانبا من نفسي، وكل تجربة مؤلمة منحتني حكمة لم أكن الأتعلمها من الكتب أدركت أن الإنسان لا ينضج عندما يتجنب السقوط، بل عندما يعرف كيف ينهض بعد كل سقوط.</p>
+                        <p>ولم تكن الرحلة فردية بالكامل، فقد مر في حياتي أشخاص تركوا أثرًا لا ينسى بعضهم دعمني بكلمة صادقة وبعضهم علمني من خلال مواقفه القاسية، وآخرون كانوا دروسا أكثر منهم رفاقا. ومع كل لقاء أو وداع، كنت أتعلم شيئًا جديدا عن الناس وعن نفسي.</p>
+                        <p>ومع مرور الوقت بدأت ألاحظ أن أفكاري لم تعد تشبه أفكار الجميع. لم أعد أقيس النجاح بما يملكه الآخرون ولا السعادة بما يعرضونه أمام الناس أصبحت أؤمن أن لكل إنسان طريقه الخاص، وأن تقليد الآخرين قد يمنحنا شعورًا مؤقتًا بالانتماء، لكنه قد يبعدنا عن حقيقتنا.</p>
+                        <p>وهنا بدأت أفهم معنى النضوج الحقيقي ليس أن أكبر في العمر، بل أن أكبر في الوعي، وأن أمتلك الشجاعة الأختار ما يناسبني حتى لو كان مختلفا عن اختيارات الآخرين فالاختلاف ليس تمردًا، بل قد يكون الطريق الوحيد لاكتشاف الذات.</p>
+                        <p>ومن هنا بدأت رحلتي نحو العيش في حياة تخالف المألوف. لم يكن هدفي أن أكون مختلفا لمجرد الاختلاف، بل أن أعيش حياة تشبه قيمي وأفكاري، وأحلامي. أدركت أن المألوف قد يمنح الإنسان الراحة، لكنه لا يمنحه دائما المعنى. أما الحياة التي تبنى على الوعي، والاختيار، والإيمان بالنفس، فهي الحياة التي تستحق أن تعاش حتى وإن بدت للآخرين غير مألوفة.</p>
+                        <div class="callout-wisdom">فالحياة ليست أن تسير حيث يسير الجميع، بل أن تمتلك الشجاعة لتصنع طريقك عندما لا تجد طريقا يشبهك .....</div>
+                        <p class="font-bold text-amber-800">" وهكذا انتهت مرحلة النضوج... لكنها كانت في الحقيقة بداية الرحلة نحو حياة تخالف المألوف.</p>
+                    </div>
+                    `;
+                }
+            },
+            {
+                id: 6,
+                type: "chapter",
+                num: "3",
+                badge: "-(2)-",
+                title: "الفصل الثالث: حياة الجامعة",
+                subhead: "الفصل الثالث",
+                render: function() {
+                    return `
+                    <div class="page-scrollable">
+                        <div class="book-header-line">
+                            <span>الفصل الثالث</span>
+                            <span>حياة الجامعة</span>
+                        </div>
+                        <div class="badge-chapter">-(2)-</div>
+                        <h2 class="title-chapter">حياة الجامعة</h2>
+                        <div class="chapter-subhead">الفصل الثالث</div>
+                        <p>عندما وقفت أمام بوابة الجامعة في صباحي الأول، شعرت بأنني أترك خلفي فصلاً كاملاً من حياتي وأفتح صفحة جديدة لم تكتب بعد لم تكن الجامعة مجرد مكان للحصول على شهادة، بل كانت عالمًا واسعا مليئا بالفرص والأسئلة، والتحديات التي لم أكن مستعدا لها تماما.</p>
+                        <p>في تلك اللحظة أدركت أنني لم أعد ذلك الطفل الذي ينتظر من يرشده، ولا ذلك المراهق الذي يبحث عن هويته بين الآخرين. أصبحت مسؤولا عن قراراتي، وع عن الوقت الذي أملكه، وعن المستقبل الذي سابنيه بيدي.</p>
+                        <p>كانت الأيام الأولى مليئة بالمشاعر المتناقضة حماس لاكتشاف كل شيء، وخوف من المجهول، ورغبة في إثبات نفسي بين وجوه جديدة لا تعرف شيئًا عن قصتي. كل محاضرة كانت تحمل فكرة جديدة، وكل شخص أقابله كان يعلمني درسا...</p>
+                        <p>ومع مرور الأيام، اكتشفت أن الجامعة لا تعلمك ما يوجد في الكتب فقط، بل تعلمك كيف تتعامل مع الفشل وكيف تنهض بعد الإخفاق، وكيف تصنع صداقات حقيقية، وكيف تميز بين من يرافقك في الطريق ومن يمر بحياتك مرورًا عابرا.</p>
+                        <p>وفي هذه المرحلة بدأت أفهم معنى العيش في حياة تخالف المألوف. لم يعد هدفي أن أسير مع الجميع في الاتجاه نفسه، بل أن أبحث عن طريقي الخاص، حتى وإن كان مختلفا. تعلمت أن النجاح ليس في تقليد الآخرين وإنما في اكتشاف ذاتي، والإيمان بأفكاري، والعمل عليها مهما بدت صعبة أو غير مألوفة.</p>
+                        <p>كانت الجامعة بداية رحلة جديدة رحلة لم تغير مستقبلي الدراسي فقط بل غيرت نظرتي إلى الحياة، وإلى نفسي، وإلى الإنسان الذي أطمح أن أصبحه.</p>
+                        <p>كانت أول خطوة داخل الحرم الجامعي مختلفة عن كل خطوة سبقتها في حياتي شعرت أنني دخلت عالما جديدا، عالما لا يعرفني فيه أحد، وعلي أن أبدأ من الصفر. كان المكان كبيرا، والوجوه كثيرة، والأحلام أكبر من أن تحصى.</p>
+                        <p>في الأيام الأولى، كنت أراقب كل شيء من حولي. أتعرف إلى زملاء جدد، وأكتشف نظامًا مختلفًا للحياة. لم تكن الجامعة مجرد قاعات ومحاضرات بل كانت مدرسة للحياة، تعلمت فيها الاعتماد على نفسي، وتحمل المسؤولية، وإدارة وقتي، ومواجهة التحديات دون انتظار من يحلها عني.</p>
+                        <p>كل يوم كنت أتعلم شيئًا جديدا، ليس فقط من الكتب، بل من التجارب، ومن الأشخاص الذين التقيت بهم، ومن المواقف التي صنعت شخصيتي.</p>
+                        <p>عندها أدركت أن الجامعة ليست نهاية مرحلة دراسية، بل بداية رحلة حقيقية نحو المستقبل، والعيش بطريقة تختلف عن المألوف....</p>
+                        <div class="callout-wisdom">الحياة التي تخالف المألوف لا تبدأ عندما تتغير الظروف، بل عندما تتغير طريقة تفكيرك<br>قد تنتهي سنوات الجامعة، لكن الدروس التي تعلمناها فيها ترافقنا مدى الحياة".</div>
+                    </div>
+                    `;
+                }
+            },
+            {
+                id: 7,
+                type: "chapter",
+                num: "4",
+                badge: "(3)",
+                title: "الفصل الرابع: نداء الخروج",
+                subhead: "الفصل الرابع",
+                render: function() {
+                    return `
+                    <div class="page-scrollable">
+                        <div class="book-header-line">
+                            <span>الفصل الرابع</span>
+                            <span>نداء الخروج</span>
+                        </div>
+                        <div class="badge-chapter">(3)</div>
+                        <h2 class="title-chapter">نداء الخروج</h2>
+                        <div class="chapter-subhead">الفصل الرابع</div>
+                        <div class="callout-wisdom">" عندما يناديك حلمك لن يعود المألوف مكانا يكفيك".</div>
+                        <p>بعد سنوات من الدراسة والتجارب بدأ صوت داخلي يزداد وضوحًا. كان يهمس لي بأن الوقت قد حان الأغادر المنطقة التي اعتدت عليها، وأن الحياة الحقيقية لا تنتظر خلف أبواب القاعات، بل خارجها.</p>
+                        <p>لم يكن الخروج مجرد مغادرة للجامعة، بل كان خروجًا من الخوف، ومن التردد، ومن فكرة أن الطريق مرسوم مسبقًا. لأول مرة شعرت أن علي أن أختار بنفسي، وأن أتحمل مسؤولية كل خطوة أخطوها.</p>
+                        <p>كان ذلك النداء مختلفا لم يكن يسمعه أحد غيري، لكنه كان أقوى من أن أتجاهله. كل يوم كان يذكرني بأن الأحلام لا تتحقق بالانتظار، وأن الإنسان لا يكتشف قدراته إلا عندما يجرؤ على خوض المجهول.</p>
+                        <p>لم يكن الطريق واضحًا كما كنت أتخيل، ولم تكن الإجابات جاهزة كما تمنيت كنت أقف بين خيار البقاء في المألوف، حيث الأمان والراحة، وخيار الخروج إلى عالم مليء بالمخاطر والفرص في الوقت نفسه.</p>
+                        <p>في تلك اللحظات، أدركت أن أكبر عدو للإنسان ليس الفشل بل الخوف من المحاولة. كثيرون يعيشون حياتهم كما يريدها الآخرون، لا كما يريدونها هم، لأنهم يخشون اتخاذ الخطوة الأولى.</p>
+                        <p>بدأت أغير طريقة تفكيري قبل أن أغير واقعي صرت أؤمن أن كل تجربة مهما كانت صعبة تحمل درشا، وأن كل باب يغلق قد يقود إلى باب أفضل لم أكن أراه.</p>
+                        <p>لم يكن نداء الخروج دعوة إلى الهروب من الحياة، بل دعوة إلى مواجهتها. دعوة إلى ترك الأعذار، وكسر القيود التي صنعتها المخاوف والسير نحو مستقبل لا يصنعه الحظ بل تصنعه القرارات والعمل المستمر.</p>
+                        <p>وفي نهاية الأمر، فهمت أن الحياة لا تتغير في يوم واحد، لكنها تتغير عندما يقرر الإنسان أن يبدأ. فالخطوة الأولى، مهما كانت صغيرة، قد تكون بداية رحلة تغير العمر كله.</p>
+                        <div class="callout-wisdom">حكمة الفصل:<br>لن تكتشف اتساع العالم ما دمت تقف عند الباب فالخطوة الأولى هي بداية كل رحلة عظيمة".</div>
+                    </div>
+                    `;
+                }
+            },
+            {
+                id: 8,
+                type: "chapter",
+                num: "5",
+                badge: "-(4)-",
+                title: "الفصل الخامس: خريطة الطريق المفقوده",
+                subhead: "الفصل الخامس",
+                render: function() {
+                    return `
+                    <div class="page-scrollable">
+                        <div class="book-header-line">
+                            <span>الفصل الخامس</span>
+                            <span>خريطة الطريق المفقوده</span>
+                        </div>
+                        <div class="badge-chapter">-(4)-</div>
+                        <h2 class="title-chapter">خريطة الطريق المفقوده</h2>
+                        <div class="chapter-subhead">الفصل الخامس</div>
+                        <div class="callout-wisdom">بعد أن خرجت إلى العالم، اكتشفت أن أصعب ما في الرحلة ليس الخروج، بل أن تمشي بلا خريطة واضحة."</div>
+                        <p>في تلك المرحلة، لم أعد ذلك الشخص الذي يعرف بالضبط إلى أين يتجه، ولا ذلك الذي يملك إجابات جاهزة لكل سؤال. كان أمامي عالم واسع مليء بالفرص، لكنه أيضا مليء بالضياع.</p>
+                        <p>كنت أتحرك بين الخيارات كما لو أنني أبحث عن شيء لا أعرف شكله، فقط أشعر أنه يجب أن يكون هناك طريق ما ينتظرني. لكن الحقيقة التي بدأت أفهمها تدريجيا هي أن الطريق لا يُعطى، بل يكتشف خطوة خطوة.</p>
+                        <p>لم تكن هناك إشارات واضحة، ولا دليل يرشدني في كل منعطف. كنت أتعلم أن الثقة بالنفس لا تعني معرفة كل شيء، بل تعني أن تستمر حتى عندما لا تعرف.</p>
+                        <p>لم يكن الطريق ضائعا كما كنت أظن في البداية، بل كان غير مرئي فقط. كل تجربة كنت أمر بها كانت تترك علامة صغيرة، وكل خطأ كنت أقع فيه كان يشير لي إلى اتجاه لم أكن أراه من قبل.</p>
+                        <p>بدأت أتعلم أن الضياع ليس نهاية، بل مرحلة ضرورية لفهم الذات. فكيف يمكن للإنسان أن يعرف وجهته إذا لم يجرب أكثر من طريق ؟ وكيف يمكنه أن يختار إذا لم يختبر الاختيارات؟</p>
+                        <p>في تلك الفترة، كنت أراقب الآخرين وكأنهم يعرفون تماما ماذا يفعلون، لكنني اكتشفت لاحقا أن الجميع يتظاهرون بالوضوح، بينما الحقيقة أن كل شخص يحاول إيجاد خريطته بطريقته الخاصة.</p>
+                        <p>شيئًا فشيئًا، بدأت أغير نظرتي للضياع. لم أعد أراه ضعفًا، بل بداية وعي جديد. لم أعد أبحث عن طريق جاهز بل بدأت أبحث عن نفسي داخل كل تجربة أخوضها.</p>
+                        <p>ومع كل خطوة، كانت الخريطة تتكون ليس على الورق، بل داخلي لم تعد الحياة تحتاج إلى دليل خارجي، لأنني بدأت أتعلم كيف أكون أنا دليلي.</p>
+                        <div class="callout-wisdom">حكمة الفصل:<br>" أحيانًا لا تفقد الطريق، بل تبدأ رحلتك الحقيقية عندما تتوقف عن انتظار الخريطة<br>لا خريطة تقودك دائمًا ... أنت من يجب أن يرسمها. وتبدأ بصناعتها بنفسك ".</div>
+                    </div>
+                    `;
+                }
+            },
+            {
+                id: 9,
+                type: "chapter",
+                num: "6",
+                badge: "(5)",
+                title: "الفصل السادس: إعادة تشكيل الذات",
+                subhead: "الفصل السادس",
+                render: function() {
+                    return `
+                    <div class="page-scrollable">
+                        <div class="book-header-line">
+                            <span>الفصل السادس</span>
+                            <span>إعادة تشكيل الذات</span>
+                        </div>
+                        <div class="badge-chapter">(5)</div>
+                        <h2 class="title-chapter">إعادة تشكيل الذات</h2>
+                        <div class="chapter-subhead">الفصل السادس</div>
+                        <p>لم يعد السؤال في هذه المرحلة أين الطريق؟ بل أصبح من أنا الآن، وإلى أي شخص أريد أن أصل ؟</p>
+                        <p>بعد رحلة البحث والضياع، بدأت أرى نفسي بشكل مختلف. لم أعد ذلك الشخص الذي ينتظر الإجابات من الخارج، بل أصبحت أدرك أن الإجابات تبنى من الداخل، خطوة بعد خطوة، وقرار بعد قرار.</p>
+                        <p>في البداية لم يكن الأمر سهلاً. كان هناك صراع داخلي بين ما اعتدت عليه وما أريد أن أصبحه بين صورة قديمة عن نفسي، وصورة جديدة بدأت تتشكل بصعوبة. كل تغيير كان يتطلب شجاعة، وكل قرار كان يعني أنني أترك شيئا خلفي.</p>
+                        <p>لكنني تعلمت أن الإنسان لا يتغير دفعة واحدة، بل يتغير عندما يرفض أن يبقى كما هو. ومع كل تجربة جديدة كنت اكتشف جزءا من نفسي لم أكن أعرفه من قبل.</p>
+                        <p>بدأت أختار طريقي بوعي أكبر، لا لأنني أصبحت أعرف كل شيء، بل لأنني توقفت عن انتظار الكمال فهمت أن الحياة لا تنتظر من يكون جاهزا، بل تكافئ من يجرؤ على المحاولة.</p>
+                        <p>ومع الوقت بدأت أرى أن إعادة تشكيل الذات" ليست تغييرا في الشكل، بل تغيير في التفكير في القرارات، وفي الطريقة التي أتعامل بها مع الحياة.</p>
+                        <div class="callout-wisdom">"أعظم تغيير في الحياة ليس أن تصبح شخصا آخر، بل أن تصبح النسخة الحقيقية منك" .</div>
+                        <p>لم يكن التغيير يحدث في الخارج فقط، بل كان يبدأ من الداخل بصمت. كنت ألاحظ كيف تتبدل أفكاري، وكيف تتغير ردود فعلي تجاه نفس المواقف التي كانت تريكني سابقا . لم أعد أهرب بسهولة، ولم أعد أقبل الأعذار التي كنت أبرر بها تقصيري في الماضي.</p>
+                        <p>بدأت أفهم أن بناء الذات لا يحتاج إلى لحظة سحرية، بل إلى تكرار صغير يومي. قرار بسيط اليوم، تجربة جديدة غدا، خطأ أتعلم منه بعده، وهكذا شيئًا فشيئًا تتشكل الشخصية.</p>
+                        <p>كان أصعب ما واجهته هو التخلي عن النسخة القديمة مني تلك النسخة التي اعتادت الراحة، والخوف والتردد. لم يكن الأمر سهلاً، لأن التغيير الحقيقي يعني أن تفقد شيئًا من نفسك لتكتشف شيئًا أعمق.</p>
+                        <p>في هذه المرحلة، بدأت أتعامل مع الحياة بطريقة مختلفة. لم أعد أنتظر الظروف المثالية، بل بدأت أصنع ما أستطيع بما أملك. ولم أعد أبحث عن الكمال، بل عن التقدم ولو كان بطيئًا.</p>
+                        <p>ومع الوقت، أدركت أن إعادة تشكيل الذات ليست هدفًا نصل إليه وتنتهي، بل هي رحلة مستمرة. كل يوم نعيد فيها تعريف أنفسنا، ونختار من تكون، وما الذي نسمح له أن يبقى داخلنا وما الذي نتركه خلفنا.</p>
+                        <p>وفي نهاية هذه المرحلة بدأت أرى أنني لم أعد ذلك الشخص الذي كان في البداية، ولم أصل بعد إلى النهاية لكنني أصبحت في الطريق الصحيح.</p>
+                        <div class="callout-wisdom">حكمة الفصل:<br>التغيير الحقيقي لا يحدث عندما تتمنى أن تصبح أفضل، بل عندما تقرر ألا تعود كما كنت".</div>
+                    </div>
+                    `;
+                }
+            },
+            {
+                id: 10,
+                type: "chapter",
+                num: "7",
+                badge: "-(6)",
+                title: "الفصل السابع: أول خطوة نحو الضوء",
+                subhead: "الفصل السابع",
+                render: function() {
+                    return `
+                    <div class="page-scrollable">
+                        <div class="book-header-line">
+                            <span>الفصل السابع</span>
+                            <span>أول خطوة نحو الضوء</span>
+                        </div>
+                        <div class="badge-chapter">-(6)</div>
+                        <h2 class="title-chapter">أول خطوة نحو الضوء</h2>
+                        <div class="chapter-subhead">الفصل السابع</div>
+                        <p>لم أعد أنتظر أن تتغير الحياة من حولي بل بدأت أدرك أن التغيير الحقيقي يبدأ عندما أقرر أنا أن أتحرك.</p>
+                        <p>بعد فترة طويلة من البناء الداخلي، جاء الوقت الذي يجب فيه أن يخرج كل ما تعلمته إلى الواقع. لم يعد الأمر مجرد أفكار أو تأملات، بل أصبح اختبارًا حقيقيا هل ما بنيته داخليا قادر على مواجهة العالم؟</p>
+                        <p>كانت الخطوة الأولى مخيفة أكثر مما توقعت. ليس لأن الطريق صعب، بل لأنني أخيرا كنت مسؤولا عن النتيجة. لم يكن هناك من ألومه غيري، ولم يكن هناك من ينتظرني غير مستقبلي الذي كنت أؤجله طويلا.</p>
+                        <p>ومع ذلك، شعرت بشيء مختلف هذه المرة. لم يكن خوفًا فقط، بل كان معه شعور خفي بالقوة. كان كل المراحل السابقة لم تكن عبثا، بل كانت إعدادًا لهذه اللحظة.</p>
+                        <p>خطوتي الأولى لم تكن كبيرة كما يتخيل البعض، لكنها كانت حقيقية. وأدركت أن العظمة لا تبدأ بالقفزات الكبيرة، بل بالخطوة الصادقة التي تكسر بها دائرة التردد.</p>
+                        <div class="callout-wisdom">أحيانا لا تحتاج أن ترى كل الطريق... يكفي أن تخطو أول خطوة بثقة. "</div>
+                        <p>بعد تلك الخطوة الأولى، لم تكن الأمور سهلة كما كنت أتخيل. الطريق لم يفتح أمامي فجأة، ولم تتحول الأحلام إلى واقع بين ليلة وضحاها، بل على العكس، بدأت أواجه واقعا مختلفا تماما عن الصورة التي رسمتها في ذهني.</p>
+                        <p>كانت هناك محاولات لا تنجح من أول مرة، وأيام أشعر فيها أنني أعود لنقطة البداية. لكن هذه المرة كان هناك اختلاف مهم لم أعد أرى الفشل كنهاية، بل كجزء من التعلم كل تجربة غير ناجحة كانت تعلمني شيئًا لم أكن الأتعلمه بدونها.</p>
+                        <p>وفي نهاية هذه المرحلة، أدركت أن أول خطوة نحو الضوء ليست لحظة نجاح، بل لحظة استمرار رغم كل ما يحاول أن يوقفك.</p>
+                        <div class="callout-wisdom">حكمة الفصل:<br>ليس المهم أن تبدأ بقوة، بل أن تستمر حتى عندما لا ترى النتيجة".</div>
+                    </div>
+                    `;
+                }
+            },
+            {
+                id: 11,
+                type: "chapter",
+                num: "8",
+                badge: "-(7)-",
+                title: "الفصل الثامن: أول السقوط أول الوعي",
+                subhead: "الفصل الثامن",
+                render: function() {
+                    return `
+                    <div class="page-scrollable">
+                        <div class="book-header-line">
+                            <span>الفصل الثامن</span>
+                            <span>أول السقوط أول الوعي</span>
+                        </div>
+                        <div class="badge-chapter">-(7)-</div>
+                        <h2 class="title-chapter">أول السقوط أول الوعي</h2>
+                        <div class="chapter-subhead">الفصل الثامن</div>
+                        <p>لم تكن كل الخطوات التي خطوتها بعد أول خطوة نحو الضوء " صعودا كما كنت أظن. فكل طريق حقيقي لا بد أن يحتوي على تعثر ليس لأنه خاطئ، بل لأنه يكشف لك الحقيقة كاملة.</p>
+                        <p>جاء أول سقوط بشكل لم أتوقعه. لم يكن مجرد خطأ بسيط، بل تجربة جعلتني أعيد التفكير في كل ما بنيته من ثقة وأفكار. شعرت للحظة أن كل ما تعلمته ربما لا يكفي، وأن الطريق الذي اخترته ليس سهلا كما كنت أتخيل.</p>
+                        <p>في البداية، كان الإحباط حاضرا بقوة. تساؤلات كثيرة بدأت تدور في داخلي: هل استعجلت؟ هل كنت أتوهم أنني قادر على التغيير؟ لكن مع مرور الوقت بدأت أرى الأمر من زاوية مختلفة.</p>
+                        <p>اكتشفت أن السقوط ليس عكس النجاح، بل جزء منه، وأن كل شخص يحاول أن يصنع فرقًا لا بد أن يمر بلحظات شك، لأنها هي التي تختبر صدق الإرادة.</p>
+                        <p>بدأت أراجع نفسي بهدوء. لم أعد أبحث عن من أخطأ، بل عن ما الذي يمكن أن أتعلمه من هذه التجربة. وهنا كان التحول الحقيقي لم أعد أرى الفشل كضرية، بل كرسالة.</p>
+                        <p>شيئًا فشيئًا، عاد إلى الهدوء الداخلي. ليس لأن المشكلة اختفت بل لأنني فهمت أن وجودها لا يعني النهاية. بل يعني أنني ما زلت في الطريق.</p>
+                        <p>وفي تلك اللحظة، أدركت أن أول سقوط حقيقي هو بداية الوعي، لأنك لا تتعلم من النجاح بقدر ما تتعلم من اللحظة التي تجبرك على الوقوف من جديد.</p>
+                        <div class="callout-wisdom">حكمة الفصل:<br>ليس السقوط ما يحددك، بل ما إذا كنت ستقف بعده أم لا".</div>
+                    </div>
+                    `;
+                }
+            },
+            {
+                id: 12,
+                type: "chapter",
+                num: "9",
+                badge: "-(8)-",
+                title: "الفصل التاسع: صراع الاستمرار",
+                subhead: "الفصل التاسع",
+                render: function() {
+                    return `
+                    <div class="page-scrollable">
+                        <div class="book-header-line">
+                            <span>الفصل التاسع</span>
+                            <span>صراع الاستمرار</span>
+                        </div>
+                        <div class="badge-chapter">-(8)-</div>
+                        <h2 class="title-chapter">صراع الاستمرار</h2>
+                        <div class="chapter-subhead">الفصل التاسع</div>
+                        <p>بعد أول سقوط، لم يعد الأمر كما كان من قبل. لم أعد ذلك الشخص المتحمس فقط، ولا ذلك الذي يظن أن الطريق سيفتح بسهولة مع كل محاولة. بدأت أرى جانبًا آخر من الرحلة جانبا لا يظهر في البدايات، لكنه يختبر من يقرر الاستمرار.</p>
+                        <p>كان أصعب ما في هذه المرحلة ليس الفشل نفسه بل تكراره أن تحاول مرة، ثم تسقط، ثم تحاول من جديد دون أن ترى نتائج واضحة بسرعة. هنا يبدأ الصراع الحقيقي بين العقل والقلب أحدهما يقول: توقف، والآخر يقول: أكمل.</p>
+                        <p>في بعض الأيام كنت أشعر بثقل داخلي لا يفسر كأن الطريق أصبح أطول مما تخيلت وكأن كل خطوة تحتاج قوة أكبر مما أملك. لكن رغم ذلك، كنت أرفض فكرة التراجع. ليس لأنني كنت واثقا من النجاح، بل لأنني كنت قد تعبت من العودة إلى البداية.</p>
+                        <p>بدأت أفهم أن الاستمرار ليس شعورًا، بل قرار. لا يعتمد على الحماس، بل على الإصرار وأن من يريد أن يخرج من المألوف، عليه أن يقبل فكرة أن الطريق لن يكون مريحًا دائما.</p>
+                        <p>في تلك المرحلة، تعلمت أن القوة الحقيقية لا تظهر في لحظات الانتصار، بل في اللحظات التي لا يرى فيها أحد ما تمر به، ومع ذلك تختار أن تكمل.</p>
+                        <p>ومع كل مرة كنت أستمر فيها رغم التعب كنت أشعر أنني لا أبني نجاحًا فقط، بل أبني نفسي من جديد.</p>
+                        <p>في بعض اللحظات، كنت أعود للتفكير: هل أنا على الطريق الصحيح ؟ لكن شيئًا بداخلي كان يرفض التراجع. ذلك الإحساس الذي بدأ في "نداء "الخروج" لم يعد مجرد فكرة، بل أصبح إيمانا داخليا أن الاستمرار أهم من الكمال.</p>
+                        <p>بدأت ألاحظ تغييرات صغيرة لكنها مهمة. أصبحت أكثر وعيا في قراراتي، أكثر صبرًا مع النتائج، وأكثر فهما الطبيعة الطريق. لم يعد الهدف أن أصل بسرعة، بل أن أفهم كيف أصل بطريقة صحيحة.</p>
+                        <p>ومع مرور الوقت بدأت أرى أولى علامات التقدم. لیست نجاحات ضخمة، لكنها خطوات حقيقية تثبت أن الجهد لم يذهب سدى. كانت تلك اللحظات كافية لتعيد لي الثقة، وتذكرني أن البداية الصحيحة لا تعني طريقا سهلا.</p>
+                        <div class="callout-wisdom">حكمة الفصل:<br>الاستمرار ليس أن لا تسقط، بل أن ترفض أن يبقى سقوطك هو النهاية".</div>
+                    </div>
+                    `;
+                }
+            },
+            {
+                id: 13,
+                type: "chapter",
+                num: "10",
+                badge: "(9)",
+                title: "الفصل العاشر: لحظة تحول داخلي",
+                subhead: "الفصل العاشر",
+                render: function() {
+                    return `
+                    <div class="page-scrollable">
+                        <div class="book-header-line">
+                            <span>الفصل العاشر</span>
+                            <span>لحظة تحول داخلي</span>
+                        </div>
+                        <div class="badge-chapter">(9)</div>
+                        <h2 class="title-chapter">لحظة تحول داخلي</h2>
+                        <div class="chapter-subhead">الفصل العاشر</div>
+                        <p>لم يكن التحول لحظة مفاجئة كما كنت أظن في السابق، بل كان نتيجة تراكم طويل من السقوط، والتفكير والاستمرار رغم كل شيء. وفي يوم عادي جدا، شعرت أن شيئًا بداخلي قد تغير فعلاً.</p>
+                        <p>لم أعد أنظر إلى الطريق بنفس الطريقة القديمة. الأشياء التي كانت تخيفني سابقًا لم تعد تملك نفس التأثير والقرارات التي كنت أتردد فيها أصبحت أسهل، ليس لأن الحياة أصبحت أبسط، بل لأنني أصبحت أهدأ داخليا.</p>
+                        <p>في تلك اللحظة، فهمت أن التحول الحقيقي لا يعني أن تصبح شخصا مختلفًا فجأة، بل أن تتوقف عن الهروب من نفسك أن تواجه ضعفك، وتتفهمه، ثم تختار أن تكمل رغم وجوده.</p>
+                        <p>بدأت أرى أن كل ما مررت به لم يكن عبثا الفشل الضياع، الصراع ... كلها لم تكن عوائق فقط، بل كانت مراحل ضرورية لتشكيل شخصيتي الحالية.</p>
+                        <p>لم أعد أبحث عن نسخة مثالية مني بل بدأت أقبل أنني إنسان يتغير، يتعلم، ويخطئ، لكنه يستمر. وهذا بحد ذاته كان أكبر تحول في حياتي.</p>
+                        <div class="callout-wisdom">وفي تلك المرحلة، لم يعد السؤال: هل أنا قادر؟<br>بل أصبح كيف أستمر وأكون أفضل مما كنت عليه أمس ؟</div>
+                        <div class="callout-wisdom">حكمة الفصل<br>التحول الحقيقي لا يحدث عندما يتغير كل شيء من حولك، بل عندما تتغير أنت من الداخل.</div>
+                    </div>
+                    `;
+                }
+            },
+            {
+                id: 14,
+                type: "chapter",
+                num: "11",
+                badge: "-(10)",
+                title: "الفصل الحادي عشر: أول ناجح حقيقي",
+                subhead: "الفصل الحادي عشر",
+                render: function() {
+                    return `
+                    <div class="page-scrollable">
+                        <div class="book-header-line">
+                            <span>الفصل الحادي عشر</span>
+                            <span>أول ناجح حقيقي</span>
+                        </div>
+                        <div class="badge-chapter">-(10)</div>
+                        <h2 class="title-chapter">أول ناجح حقيقي</h2>
+                        <div class="chapter-subhead">الفصل الحادي عشر</div>
+                        <p>بعد لحظة التحول التي مررت بها لم تتغير حياتي فجأة، لكن تغير شيء أهم من ذلك: طريقة تعاملي مع الفرص.</p>
+                        <p>بدأت أتعامل مع كل محاولة وكأنها فرصة حقيقية، لا مجرد تجربة عابرة. لم أعد أهرب من التحديات، بل أقترب منها حتى وإن كنت لا أملك كل الإجابات.</p>
+                        <p>وفي إحدى المحاولات حدث شيء مختلف. لم يكن إنجازا ضخما في نظر الآخرين، لكنه كان بالنسبة لي نقطة فارقة. أول نتيجة حقيقية تثبت أن كل ما مررت به لم يكن عبثا.</p>
+                        <p>لم يكن النجاح في حد ذاته هو ما أدهشني بل إحساسي أنني أستطيع. أنني قادر على أن أحول الفكرة إلى فعل والخوف إلى تجربة والتردد إلى خطوة.</p>
+                        <p>في تلك اللحظة، لم أشعر أنني وصلت للنهاية، بل شعرت أنني بدأت أفهم كيف يعمل الطريق فعلا. النجاح لم يكن وجهة، بل نتيجة طبيعية للاستمرار والتغيير الداخلي.</p>
+                        <p>لكن الأهم من ذلك، أنني لم أعد أرى النجاح كحدث نادر، بل كبداية لمسار جديد يحتاج إلى وعي أكبر واستمرار أعمق.</p>
+                        <div class="callout-wisdom">حكمة الفصل:<br>أول نجاح حقيقي لا يغير حياتك... بل يغيّر إيمانك بنفسك."</div>
+                    </div>
+                    `;
+                }
+            },
+            {
+                id: 15,
+                type: "chapter",
+                num: "12",
+                badge: "-(11)",
+                title: "الفصل الثاني عشر: صدق أو لا تصدق",
+                subhead: "الفصل الثاني عشر",
+                render: function() {
+                    return `
+                    <div class="page-scrollable">
+                        <div class="book-header-line">
+                            <span>الفصل الثاني عشر</span>
+                            <span>صدق أو لا تصدق</span>
+                        </div>
+                        <div class="badge-chapter">-(11)</div>
+                        <h2 class="title-chapter">صدق أو لا تصدق</h2>
+                        <div class="chapter-subhead">الفصل الثاني عشر</div>
+                        <p>في هذه الرحلة، لم تكن كل الأمور تسير بشكل منطقي أو متوقع. بعض المواقف التي مررت بها كانت تبدو في لحظتها أكبر من أن تصدق، وكأن الحياة تحاول أن تختبر إيماني بطريقي كل مرة بطريقة مختلفة.</p>
+                        <p>أحيانا كنت أبدأ شيئًا وأنا لا أملك أي ضمان للنجاح، ومع ذلك كانت النتائج تأتي من أماكن لم أكن أحسب لها حسابا. وفي أوقات أخرى كنت أبذل كل ما أملك من جهد، ثم لا أرى أي نتيجة تذكر، وكأن الطريق يسحبني مرة إلى الأمام ومرة إلى الخلف.</p>
+                        <p>أذكر موقفا جعلني أعيد التفكير في الكثير مما أؤمن به كنت أظن أن التوقيت هو كل شيء، وأن التأخير يعني خسارة الفرص. لكن حدث أن فرصة جاءتني في وقت لم أكن فيه مستعدا تمامًا، ومع ذلك كانت هي النقطة التي غيرت مسار تفكيري بالكامل.</p>
+                        <p>وفي موقف آخر خسرت شيئًا كنت اعتقد أنه مهم جدًا في حياتي، وكنت أراه نهاية الطريق كنت اتمناه لكن مع مرور الوقت اكتشفت أن ما اعتبرته خسارة كان في الحقيقة بداية لشيء أفضل بكثير مما توقعت.</p>
+                        <p>هذه التناقضات جعلتني أفهم شيئًا مهما: الحياة ليست دائما عادلة أو مفهومة في لحظتها، لكنها تصبح واضحة عندما تنظر إليها بعد مرور الوقت عندها فقط نفهم لماذا حدث كل شيء كما حدث.</p>
+                        <p>بدأت أتعلم أن لا أسارع في الحكم على الأحداث، ولا أعتبر أي تجربة نجاحا أو فشلاً بشكل نهائي. كل شيء قابل للتغيير، وكل موقف يحمل درسا مخفيا لا يظهر إلا لاحقا.</p>
+                        <p>ومع كل صدق أو لا تصدق" مررت بها، أصبحت أكثر هدوءا في التعامل مع الحياة، وأكثر قبولا لفكرة أن ليس كل ما يحدث لنا يجب أن تفهمه فورا.</p>
+                        <div class="callout-wisdom">حكمة الفصل<br>ليست كل الأحداث مفهومة في وقتها ... بعض الدروس لا تفهم إلا بعد أن تصبح ذكرى".</div>
+                    </div>
+                    `;
+                }
+            },
+            {
+                id: 16,
+                type: "chapter",
+                num: "13",
+                badge: "-(12)-",
+                title: "الفصل الثالث عشر: الثبات بعد العاصفة",
+                subhead: "الفصل الثالث عشر",
+                render: function() {
+                    return `
+                    <div class="page-scrollable">
+                        <div class="book-header-line">
+                            <span>الفصل الثالث عشر</span>
+                            <span>الثبات بعد العاصفة</span>
+                        </div>
+                        <div class="badge-chapter">-(12)-</div>
+                        <h2 class="title-chapter">الثبات بعد العاصفة</h2>
+                        <div class="chapter-subhead">الفصل الثالث عشر</div>
+                        <p>بعد كل ما مررت به من تقلبات وتجارب لم أكن أتوقعها، بدأت ألاحظ أن داخلي أصبح أكثر هدوءا. لم يعد كل شيء يهزني كما كان في السابق، ولم أعد أتفاعل مع الأحداث بنفس التوتر والاندفاع.</p>
+                        <p>كانني خرجت من عاصفة طويلة، وتركت خلفي فوضى كثيرة، لكنني في المقابل اكتسبت شيئًا أهم الثبات ذلك الشعور الذي لا يأتي فجأة، بل يتكون مع الوقت مع كل موقف صعب تتجاوزه، ومع كل مرة تختار فيها أن تكمل رغم التعب.</p>
+                        <p>لم تعد الحياة بالنسبة لي سلسلة من الصدمات، بل أصبحت سلسلة من الدروس المتتالية. كل حدث أصبح له معنى وكل تجربة أصبحت جزءا من فهمي لنفسي والطريق الذي أسير فيه.</p>
+                        <p>بدأت أتعلم أن القوة الحقيقية ليست في أن لا تسقط، بل في أن تبقى واقفا رغم كل ما يحاول أن يغيرك أو يوقفك. وأن الاستقرار الداخلي لا يعني غياب المشاكل، بل القدرة على التعامل معها بهدوء أكبر ووعي أعمق.</p>
+                        <p>في هذه المرحلة، لم أعد أبحث عن إجابات لكل شيء، بل بدأت أكتفي بأنني أسير في الاتجاه الصحيح، حتى لو لم يكن الطريق واضحا بالكامل.</p>
+                        <p>ومع الوقت، أدركت أن الثبات ليس نهاية الرحلة، بل بداية فهم أعمق للحياة، ولنفسي، ولما أريده فعلا.</p>
+                        <div class="callout-wisdom">حكمة الفصل:<br>"الثبات لا يعني أن الحياة توقفت عن التغيير، بل أنك أصبحت أقوى من أن يهزك كل تغيير".</div>
+                    </div>
+                    `;
+                }
+            },
+            {
+                id: 17,
+                type: "chapter",
+                num: "14",
+                badge: "-(13)-",
+                title: "الفصل الرابع عشر: التصالح مع النفس",
+                subhead: "الفصل الرابع عشر",
+                render: function() {
+                    return `
+                    <div class="page-scrollable">
+                        <div class="book-header-line">
+                            <span>الفصل الرابع عشر</span>
+                            <span>التصالح مع النفس</span>
+                        </div>
+                        <div class="badge-chapter">-(13)-</div>
+                        <h2 class="title-chapter">التصالح مع النفس</h2>
+                        <div class="chapter-subhead">الفصل الرابع عشر</div>
+                        <p>بعد كل ما مررت به بدأت أرى نفسي بشكل مختلف. لم أعد ذلك الشخص الذي يحاول أن يثبت للعالم شيئًا. ولا الذي يركض خلف صورة مثالية يريد الوصول إليها بأي ثمن. بل أصبحت أكثر هدوءا تجاه نفسي، وأكثر فهما لها.</p>
+                        <p>في السابق، كنت أقسو على نفسي كثيرا ألومها على الأخطاء، وأحملها فوق طاقتها، وأقارنها دائما بما ينجح عند الآخرين. لكن مع الوقت بدأت أدرك أن هذه الطريقة لم تكن تبنيني، بل كانت تستهلكني بصمت.</p>
+                        <p>التصالح مع النفس لم يكن لحظة واحدة، بل كان سلسلة من المواقف الصغيرة التي علمتني أنني لست مطالبا بأن أكون كاملا، بل أن أكون حقيقيا. أن أتعلم من أخطائي بدل أن أهرب منها، وأن أقبل ضعفي دون أن أجعله نهاية الطريقي.</p>
+                        <p>بدأت أفهم أنني لست نسخة ثابتة، بل إنسان يتغير باستمرار. وكل مرحلة مررت بها لم تكن خطأ، بل كانت جزءا من تكويني حتى تلك اللحظات التي ظننت أنها كسرتني اكتشفت لاحقا أنها كانت تعيد تشكيلي بشكل أعمق.</p>
+                        <p>ومع هذا الفهم، أصبح داخلي أكثر سلامًا. لم أعد أبحث عن الكمال، بل عن التوازن. لم أعد أحاول أن أكون شخصا آخر، بل بدأت أركز على أن أكون أفضل نسخة من نفسي كما أنا لا كما يريدني الآخرون.</p>
+                        <p>في هذه المرحلة، أدركت أن أعظم انتصار يمكن أن يحققه الإنسان ليس على العالم، بل على صراعه الداخلي مع نفسه.</p>
+                        <div class="callout-wisdom">حكمة الفصل:<br>عندما تتوقف عن محاربة نفسك تبدأ أخيرًا في العيش بسلام."</div>
+                    </div>
+                    `;
+                }
+            },
+            {
+                id: 18,
+                type: "chapter",
+                num: "15",
+                badge: "(14)-",
+                title: "الفصل الخامس عشر: الخروج من منطقة الراحة المزيفة",
+                subhead: "الفصل الخامس عشر",
+                render: function() {
+                    return `
+                    <div class="page-scrollable">
+                        <div class="book-header-line">
+                            <span>الفصل الخامس عشر</span>
+                            <span>الخروج من منطقة الراحة المزيفة</span>
+                        </div>
+                        <div class="badge-chapter">(14)-</div>
+                        <h2 class="title-chapter">الخروج من منطقة الراحة المزيفة</h2>
+                        <div class="chapter-subhead">الفصل الخامس عشر</div>
+                        <p>نحن نقدس الأمان إلى حد التخدير نولد ونحن نحمل فطرة تسعى نحو الاستقرار نحو تقليل المخاطر والهروب من المجهول. لكن المشكلة تبدأ حين يتحول "الأمان" إلى قفص من ذهب، وحين يصبح "المألوف" سجناً تختط بأنفسنا قضبانه لكي نضمن ألا نتألم، وألا نفشل وألا تثير تساؤلات الآخرين.</p>
+                        <p>تلك المنطقة الدافئة والمريحة التي تقضي فيها معظم أيامك - وظيفة لا تحبها لكنها تضمن لك راتباً ثابتاً، روتين يومي يستهلك روحك لكنه يخلو من المفاجآت، علاقات باهتة تبقيها فقط لأن الفراق مجهول، وأفكار موروثة لا تجرؤ على مناقشتها - ليست إلا "منطقة راحة مزيفة". هي لا تمنحك الراحة حقاً بل تسرق منك الحياة بالتقسيط المريح.</p>
+                        <p>لماذا نسميها "مزيفة"؟ لأنها توهمك بأنك تحمي نفسك، بينما هي في الواقع تقتلك ببطء. إنها تقتل فضولك وتخمد شغفك، وتحولك إلى شاهد عيان على حياة شخص آخر، بدلاً من أن تكون بطلها الحقيقي. الجلوس على الشاطئ آمن تماماً، نعم.. لكن السفن لم تُين لتبقى راسية في الموانى السفن صممت لتصارع الأمواج وتكتشف العوالم البعيدة.</p>
+                        <p>لكي تعيش حياة تخالف المألوف، عليك أن تفهم قاعدة أساسية النمو والأمان لا يجتمعان في مكان واحد. لا يمكنك أن تتسع مداركك، وتتطور قدراتك، وتكتشف النسخة الأجمل والأشجع منك وأنت تجلس متربعاً في نفس المكان تمارس نفس العادات وتفكر بنفس الطريقة التي أودعتك فيها الظروف.</p>
+                        <p>الخروج من منطقة الراحة لا يعني أن تلقي بنفسك في التهلكة بلا عقل، ولا يعني أن تقلب حياتك رأساً على عقب بصورة عشوائية ومتهورة. الخروج الحقيقي هو شجاعة اتخاذ الخطوة الأولى نحو ما ترفضه مخاوفك الوهمية. هو ذلك القرار الهادئ والصارم بأن تقول: "أنا أريد أن أعرف ما الذي يكمن خلف هذا الأفق، حتى لو كلفني ذلك تعب البدايات".</p>
+                        <p>في المرة القادمة التي تشعر فيها بالخوف لمجرد أنك تفكر في تجربة شيء جديد تذكر شيئاً واحداً: الخوف ليس علامة على أنك على خطأ، بل هو غالباً الدليل الأكيد على أنك على وشك القيام بشيء يستحق حقاً.</p>
+                        <div class="callout-wisdom">الحكمة من الفصل<br>الأمان الحقيقي ليس في البقاء حيث اعتدت، بل في ثقتك بقدرتك على التكيف والنمو والنجاح مهما واجهت من مجهول.</div>
+                    </div>
+                    `;
+                }
+            },
+            {
+                id: 19,
+                type: "chapter",
+                num: "16",
+                badge: "-(15)-",
+                title: "الفصل السادس عشر: فن صناعة القواعد الخاصة بك",
+                subhead: "الفصل السادس عشر",
+                render: function() {
+                    return `
+                    <div class="page-scrollable">
+                        <div class="book-header-line">
+                            <span>الفصل السادس عشر</span>
+                            <span>فن صناعة القواعد الخاصة بك</span>
+                        </div>
+                        <div class="badge-chapter">-(15)-</div>
+                        <h2 class="title-chapter">فن صناعة القواعد الخاصة بك</h2>
+                        <div class="chapter-subhead">الفصل السادس عشر</div>
+                        <p>منذ لحظة ولادتنا، يُصاغ لنا كتيب إرشادات جاهز لكل تفصيلة في حياتنا. يخبرك المجتمع كيف يجب أن تدرس، وما هي الوظيفة التي تمنحك ال وجاهة، وفي أي عمر يجب أن تتزوج، وطريقة اللباس التي تجعل الناس يحترمونك، وحتى شكل النجاح الذي يُفترض أن تسعى إليه لتشعر بالرضا.</p>
+                        <p>المشكلة الحقيقية لا تكمن في وجود هذه القواعد بل في تعاملنا معها على أنها حقائق مقدسة، وليست مجرد خيارات صاغها أشخاص عاشوا في ظروف مختلفة وعصور سابقة. نكبر ونحن نركض في سباق ليس سباقنا لنكتشف في منتصف الطريق أننا فزنا بجائزة لا نريدها، ووصلنا إلى قمة جبل تسلقناه بالخطأ.</p>
+                        <p>لكي تعيش حياة تخالف المألوف، يجب أن تدرك أنك لست مجرد متلق للنظم الجاهزة، بل أنت صانع قواعدك الخاصة.</p>
+                        <p>صناعة القواعد الخاصة بك لا تعني الفوضى أو التمرد الأعمى لمجرد المخالفة بل تعني الوعي. تعني أن تقف مع نفسك وتسأل بصدق: هل هذه الرغبة رغبتي حقاً، أم أنها صدى الأصوات الآخرين في رأسي؟" عندما تكتشف إجابة هذا السؤال، تبدأ في إسقاط القوالب التي لا تناسب روحك، وتبني معاييرك الخاصة للنجاح والسعادة، والسلام.</p>
+                        <p>البعض يرى أن كسر القواعد الاجتماعية مغامرة مرعبة، لأن القالب الجاهز يمنحك شعوراً وهمياً بالاطمئنان فهو يجنبك نظرات الاستهجان ويحمي من عناء التبرير. لكن الثمن الذي تدفعه مقابل هذا الاطمئنان هو هدوء روحك وموت هويتك الفريدة.</p>
+                        <p>الحياة الحقيقية تبدأ يوم تتوقف عن محاولة إرضاء "المرجع الختمي" أو العرف الاجتماعي، وتبدأ في إرضاء صوتك الداخلي الصادق. قد تتطلب منك هذه الخطوة أن تبدو غريباً في أعين البعض، أو أن تسلك طريقاً غير معبد، لكن تذكر دائماً : الآثار البارزة في تاريخ البشرية لم يصنعها قط أولئك الذين ساروا في طابور المنتظرين بل صنعها من امتلكوا شجاعة رسم خطوطهم الخاصة.</p>
+                        <div class="callout-wisdom">الحكمة من الفصل<br>حياتك ليست نسخة مكررة لتجربة شخص آخر توقف عن تطبيق كتيب إرشادات صنع لغيرك، وابدأ في كتابة قواعدك الخاصة.</div>
+                    </div>
+                    `;
+                }
+            },
+            {
+                id: 20,
+                type: "chapter",
+                num: "17",
+                badge: "-(16)-",
+                title: "الفصل السابع عشر: ثمن التفرد",
+                subhead: "الفصل السابع عشر",
+                render: function() {
+                    return `
+                    <div class="page-scrollable">
+                        <div class="book-header-line">
+                            <span>الفصل السابع عشر</span>
+                            <span>ثمن التفرد</span>
+                        </div>
+                        <div class="badge-chapter">(16)-</div>
+                        <h2 class="title-chapter">ثمن التفرد مواجهة النقد والتنمر الاجتماعي</h2>
+                        <div class="chapter-subhead">الفصل السابع عشر</div>
+                        <p>حين تقرر أن تخلع عنك القوالب الجاهزة وتسلك طريقاً مختلفاً، وحين تتوقف عن الركض في الطابور المعتاد ستحدث الهزة الأولى في المحيط من حولك لن يمر قرارك بالتفرد مرور الكرام فالمجتمع بطبيعته يخشى المختلف لأنه يذكره بما فاته، ويرى في تمردك الهادئ مرآة عاكسة لتردده هو.</p>
+                        <p class="font-bold text-amber-800 text-lg">هنا بالتحديد يبدأ الاختبار الحقيقي: ثمن التفرد.</p>
+                        <p>في اللحظة التي تعلن فيها عن هويتك الحقيقية، ستبدأ الأصوات في الارتفاع. سيخبرك أحدهم أنك متهور وسيسخر آخر من أفكارك، وربما يحاول البعض تثبيط عزيمتك تحت شعار "الخوف عليك" أو "نصحك". النقد هنا لا يأتي دائماً على شكل شتائم واضحة بل قد يتخذ شكل نظرات الاستغراب، أو الابتسامات الساخرة، أو التشكيك المستمر في قدراتك.</p>
+                        <p>الخطأ الأكبر الذي يقع فيه الكثيرون هو انتظار اللحظة التي سيتوقف فيها الجميع عن انتقادهم. هذه اللحظة لن تأتي أبداً. طالما أنك تترك المألوف وتصنع شيئاً خاصاً بك، فستكون عرضة للألسنة والأحكام. السر لا يكمن في البحث عن عالم بلا نقاد، بل في إيجاد مساحة داخلية لا يهتز فيها جدارك لمجرد أن أحدهم ألقى بحجر.</p>
+                        <p>عليك أن تدرك حقيقة بسيطة وقاسية في آن واحد النقد هو الضريبة الإلزامية التي تدفعها مقابل حريتك كلما كان صوتك حقيقياً وجريئاً، زادت الأصوات المعارضة في البداية، لأن الناس يعارضون عادة ما لا يفهمون ويحاربون ما يعجزون هم أنفسهم عن فعله.</p>
+                        <p>حين يهاجمك أحدهم، تذكر أن معركته ليست معك، بل مع خوفه الداخلي من الإقدام. إذنك، لا توفر وقتاً في الدفاع عن نفسك أو محاولة إقناع شخص قرر مسبقاً ألا يفهمك طاقة التبرير مستنزفة، ووقتك أثمن بكثير من أن تضيعه في ترميم صورته العقلية عنك. سر في طريقك، ودع أفعالك ونتائجك تتحدث بصوت أعلى بكثير من كل الأصوات المحيطة.</p>
+                        <div class="callout-wisdom">الحكمة من الفصل<br>النقد هو الضريبة التي تدفعها مقابل حريتك وكلما كان صوتك حقيقياً ومختلفاً، زادت الأصوات المعارضة في البداية، فلا تدعها توقف مسيرتك</div>
+                    </div>
+                    `;
+                }
+            },
+            {
+                id: 21,
+                type: "chapter",
+                num: "18",
+                badge: "(17)",
+                title: "الفصل الثامن عشر: استثمار الفشل كوقود للنجاح",
+                subhead: "الفصل الثامن عشر",
+                render: function() {
+                    return `
+                    <div class="page-scrollable">
+                        <div class="book-header-line">
+                            <span>الفصل الثامن عشر</span>
+                            <span>استثمار الفشل كوقود للنجاح</span>
+                        </div>
+                        <div class="badge-chapter">(17)</div>
+                        <h2 class="title-chapter">استثمار الفشل كوقود للنجاح</h2>
+                        <div class="chapter-subhead">الفصل الثامن عشر</div>
+                        <p>حين تسير في طرق لم تمهد من قبل، ومن خلفك أصوات الناقدين، وتتقدم بثقة نحو مجهولك الخاص، فهناك حقيقة رياضية وحتمية ستواجهك عاجلاً أو آجلاً ستتعثر.. وستسقط في مرحلة ما.</p>
+                        <p>لكن الفارق الجوهري بين من يعيش حياة مألوفة ومن يختار حياة تخالف المألوف، لا يكمن في غياب السقوط بل في كيفية تفسير هذا السقوط والتعامل معه.</p>
+                        <p>في البرمجة الاجتماعية التقليدية، ينظر إلى الفشل على أنه وصمة عار أو دليل قاطع على أنك لست أهلاً للمغامرة، أو نهاية خط المطاف. هذا المفهوم المسموم هو ما يقتل الملايين من الأفكار الرائعة في مهدها ويجعل الناس يفضلون الجمود والضياع البطيء على خطر المحاولة.</p>
+                        <p>لكن من يخالف المألوف يرى الفشل بمنظور مختلف كلياً فهو لا يراه سوى بيانات "خام" أو "رسالة تصحيح مسار". عندما تسقط وأنت تجرب شيئاً جديداً كلياً، فأنت لم تفشل كإنسان، بل اكتشفت طريقة واحدة لا تعمل، وهذا بحد ذاته إنجاز يقربك خطوة إضافية نحو الطريقة الصحيحة.</p>
+                        <p>العظماء، والمبتكرون، وكل أولئك الذين صنعوا فرقاً حقيقياً في تاريخ العالم، لم يصلوا إلى ما وصلوا إليه لأنهم امتلكوا طريقاً مفروشاً بالورود، بل لأنهم جمعوا قطع خيبات أملهم وصنعوا منها سلالم للوصول. طعم السقوط من نعم، وتجربة خذلان التوقعات مؤلمة، لكن الألم المؤقت لفشل صادق وشجاع أرحم بكثير من المرارة الدائمة للندم على فرصة لم تمنحها حتى فرصة المحاولة.</p>
+                        <p>في المرة القادمة التي تخذلك فيها النتيجة، لا تلطم الخدود ولا تجلد ذاتك. قف بهدوء، ونفض الغبار عنك واسأل نفسك بوعي: "ما الذي علمني إياه هذا السقوط ؟" ثم خذ هذا الحطام، واجعله وقوداً يدفعك نحو الأمام.</p>
+                        <div class="callout-wisdom">الحكمة من الفصل<br>الفشل ليس دليلاً على عجزك بل هو دليل شجاعة على أنك تجرأت على محاولة ما لم يجرؤ غيرك على فعله وهو البوصلة التي تصحح مسارك نحو النجاح الحقيقي.</div>
+                    </div>
+                    `;
+                }
+            },
+            {
+                id: 22,
+                type: "chapter",
+                num: "19",
+                badge: "-(18)-",
+                title: "الفصل التاسع عشر: بناء شبكة دعم من نوع مختلف",
+                subhead: "الفصل التاسع عشر",
+                render: function() {
+                    return `
+                    <div class="page-scrollable">
+                        <div class="book-header-line">
+                            <span>الفصل التاسع عشر</span>
+                            <span>بناء شبكة دعم من نوع مختلف</span>
+                        </div>
+                        <div class="badge-chapter">-(18)-</div>
+                        <h2 class="title-chapter">بناء شبكة دعم من نوع مختلف</h2>
+                        <div class="chapter-subhead">الفصل التاسع عشر</div>
+                        <p>حين تبدأ في تغيير وجهتك، وحين تكف عن الركض مع القطيع، ستلاحظ شيئاً غريباً ومؤلماً في نفس الوقت بعض الوجهات القديمة والعلاقات المعتادة لم تعد تناسب مقاسك الجديد الأشخاص الذين قضيت معهم سنوات طويلة في التذمر المشترك، أو في تبادل الشكاوى حول ظروف الحياة سيشعرون بالتهديد عندما يرونك تنهض وتتغير.</p>
+                        <p>الإنسان بطبيعته كائن اجتماعي، وتأثره بمحيطه ليس مجرد احتمال بل هو حتمية علمية ونفسية. يقال دائماً إنك متوسط الأشخاص الخمسة الذين تقضي معظم وقتك برفقتهم فإذا كان هؤلاء الخمسة يخشون التغيير ويرضون بالقاع، ويمتلئون بالمخاوف والمبررات الجاهزة للبقاء في مكانهم، فسحبك نحو الخلف سيكون مجرد مسألة وقت.</p>
+                        <p class="font-bold text-amber-800">لذلك، فإن العيش في حياة تخالف المألوف يتطلب منك شجاعة حاسمة: إعادة هندسة محيطك البشري.</p>
+                        <p>أنت لا تحتاج إلى جيش جارف من المعارف والأصدقاء العابرين ما تحتاجه حقاً هو "شبكة دعم من نوع مختلف. ابحث عن أولئك المجانين" بأفكارهم، الذين يؤمنون بأن المستحيل مجرد كلمة أوجدها الخائفون. ابحث عن الأرواح الشجاعة التي لا تخاف من نقاش الأحلام الكبيرة، ولا تستخف بالتجارب الجديدة، بل تصفق لكل خطوة خطوها خارج الصندوق.</p>
+                        <p>إن وجود شخص واحد فقط يفهم لغتك الجديدة، ويهز رأسه تأييداً لطموحاتك بدل أن يحبطك، يوازي في قيمته مئات المشجعين السطحيين. وحين لا تجد هذا الصديق القريب، تذكر أن الكتب والأفكار الملهمة والمجتمعات الواعية عبر الإنترنت أو الواقع قادرة على أن تكون ملاذاً مؤقتاً حتى تعثر على رفقاء دربك الحقيقيين.</p>
+                        <p>أحط نفسك بمن يمدون جسوراً نحو المستقبل، لا بمن يبنون جدراناً تمنعك من التقدم.</p>
+                        <div class="callout-wisdom">الحكمة من الفصل<br>أنت متوسط الأشخاص الأقرب إلى روحك لذا اختر بحكمة من يرفع سقف طموحاتك ويشاركك شغف التمرد الهادئ، لا من يخفضه بحجة الواقعية الزائفة.</div>
+                    </div>
+                    `;
+                }
+            },
+            {
+                id: 23,
+                type: "chapter",
+                num: "20",
+                badge: "-(19)-",
+                title: "الفصل العشرين: العيش بيقظة",
+                subhead: "الفصل العشرين",
+                render: function() {
+                    return `
+                    <div class="page-scrollable">
+                        <div class="book-header-line">
+                            <span>الفصل العشرون</span>
+                            <span>العيش بيقظة</span>
+                        </div>
+                        <div class="badge-chapter">-(19)-</div>
+                        <h2 class="title-chapter">العيش بيقظة (الاستمتاع بالرحلة لا القمة فقط)</h2>
+                        <div class="chapter-subhead">الفصل العشرين</div>
+                        <p>حين تغادر المألوف ونبدأ في صناعة قواعدنا الخاصة، وحين نواجه النقد ونتجاوز الفشل ونحيط أنفسنا بالأشخاص المناسبين، نقع أحياناً في فخ جديد فخ الهوس بالهدف النهائي.</p>
+                        <p>نصبح مهووسين بالوصول إلى القمة، ونظن أن السعادة الحقيقية والرضا المطلق محجوزان فقط لتلك اللحظة التي سنحقق فيها إنجازنا الكبير. فنقضي أيامنا نركض باهتمام أعمى، وتؤجل سعادتنا لنهاية الطريق لنكتشف فجأة أننا عبرنا تفاصيل الحياة الجميلة دون أن نلاحظها، وأننا أصبحنا غرباء عن اللحظة الحاضرة.</p>
+                        <p>العيش بخلاف المألوف لا يعني فقط أن تصل إلى مكان مختلف بل يعني أن تختبر الحياة بطريقة مختلفة. اليقظة الذهنية والوعي باللحظة الحالية هما بوصلتك الحقيقية. الحياة ليست مجموعة من المحطات الكبرى أو الإنجازات البارزة المذكورة في سيرة ذاتية الحياة الحقيقية تكمن في التفاصيل الصغيرة البسيطة: فنجان قهوة الصباح بهدوء دون استعجال نظرة امتنان لسلامك الداخلي الذي حققته بعد تعب مشوار قصير بلا وجهة محددة، ومحادثة صادقة مع روح تشبهك.</p>
+                        <p>حين تتوقف عن ربط سعادتك بالمستقبل البعيد، وتدرك أن كل يوم تعيشه بصدق ووعي هو بحد ذاته مكسب يزول عنك ثقل الانتظار. أنت لا تعيش لكي تنهي قائمة أهدافك وتستريح، بل تعيش لتتذوق طعم التجربة بكل ما فيها من حلو ومر.</p>
+                        <p>اجعل قمتك منارة توجهك، لكن لا تنس أبداً أن تمد بصرك لتستمتع بكل خطوة تخطوها على سفح الجبل.</p>
+                        <div class="callout-wisdom">الحكمة من الفصل<br>الحياة ليست سباقاً محموماً نحو محطة وصول نهائية، بل هي التجربة نفسها وحين تعيش بلا قوالب جاهزة تصبح كل لحظة عادية مغامرة فريدة تستحق الامتنان.</div>
+                    </div>
+                    `;
+                }
+            },
+            {
+                id: 24,
+                type: "epilogue",
+                num: "21",
+                badge: "(20)",
+                title: "الخاتمة: رسالة إلى المتمرد الهادئ",
+                subhead: "الخاتمة",
+                render: function() {
+                    return `
+                    <div class="page-scrollable">
+                        <div class="book-header-line">
+                            <span>الخاتمة</span>
+                            <span>رسالة إلى المتمرد الهادئ</span>
+                        </div>
+                        <div class="badge-chapter">(20)</div>
+                        <h2 class="title-chapter">الخاتمة.<br>رسالة إلى المتمرد الهادئ</h2>
+                        <p class="font-bold text-amber-800 text-lg">إلى كل من أتم قراءة هذه الصفحات ووجد فيها شيئاً يلمس روحه...</p>
+                        <p>لقد بدأت هذه الرحلة بالحديث عن التصالح مع النفس»، وتجولت بين طيات الفصول ترفض القوالب الجاهزة، وتصنع قواعدك الخاصة، وتواجه النقد، وتستثمر الفشل، وتحيط نفسك بمن يشبهون طموحاتك. والآن، وأنت تقف على عتبة الصفحة الأخيرة، أود أن أقول لك شيئاً مهماً</p>
+                        <p>إن التمرد الحقيقي ليس صخباً، ولا ثورة على كل شيء حولك لمجرد الاعتراض. التمرد الحقيقي هو سلامك الداخلي الصامت، هو قدرتك على أن تظل صادقاً مع نفسك في عالم يحاول جاهدًا أن يشبه بعضه البعض. أن تختار طريقك بهدوء، وألا تسمح لأحد أن يسرق منك دهشتك وبوصلتك.</p>
+                        <p>الحياة التي تخالف المألوف ليست طريقاً مفروشاً بالورود بل هي مغامرة شجاعة تتطلب منك أن تظل رغم كل الهزات، مؤمناً بأنك تستحق أن تعيش حكايتك الخاصة، لا حكاية أمليت عليك.</p>
+                        <p>اغلق هذا الكتاب الآن، ولا تبق متفرداً بين الأوراق فقط بل انزل إلى ميدان الحياة الواسع. خذ خطوتك الأولى واكتب بقلمك الأيام القادمة، وكن دائماً ذلك الشخص الذي لا يرضى بالظل حين كتب له أن يشرق.</p>
+                        <div class="callout-wisdom">الحكمة من الخاتمة<br>التغيير لا يبدأ بقرار ضخم بل بخطوة صغيرة وصادقة تعلن فيها لنفسك والعالم أنك، ولأول مرة، مالك أمرك ومؤلف حكايتك الحقيقي.</div>
+                    </div>
+                    `;
+                }
+            },
+            {
+                id: 25,
+                type: "author_word",
+                title: "كلمة المؤلفة",
+                subhead: "الخاتمة",
+                render: function() {
+                    return `
+                    <div class="page-scrollable flex flex-col justify-center text-center">
+                        <div class="book-header-line">
+                            <span>ختام الكتاب</span>
+                            <span>كلمة المؤلفة</span>
+                        </div>
+                        <h2 class="title-chapter mb-4">كلمة المؤلفة</h2>
+                        <p class="text-lg leading-relaxed">إلى كل من رافقني في هذه الرحلة حتى آخر حرف.. أتمنى أن تكون هذه الصفحات قد لامست شيئاً حقيقياً في أعماقك، وأن تكون قد وجدت هنا شجاعة كافية لتكون أنت بكل ما تبقيك فريداً ومختلفاً.</p>
+                        <p class="text-lg leading-relaxed mt-4">تذكر دائماً أن الحياة أوسع بكثير من أن نعيشها في قوالب صنعها الآخرون. شكراً لأنك منحتني وقتك، ولأنك شاركتني جزءاً من شغفك وفكرك.</p>
+                        <p class="font-bold text-amber-800 text-xl mt-6">مع كل الحب والسلام....</p>
+                        <div class="text-3xl font-bold text-amber-700 font-['Aref_Ruqaa'] mt-6">أسيل العطار</div>
+                    </div>
+                    `;
+                }
+            }
+        ];
+
+        let audioCtx = null;
+
+        function playRealisticPageFlipSound() {
+            try {
+                if (!audioCtx) {
+                    const AudioContext = window.AudioContext || window.webkitAudioContext;
+                    audioCtx = new AudioContext();
+                }
+                if (audioCtx.state === 'suspended') {
+                    audioCtx.resume();
+                }
+
+                const bufferSize = audioCtx.sampleRate * 0.18;
+                const buffer = audioCtx.createBuffer(1, bufferSize, audioCtx.sampleRate);
+                const data = buffer.getChannelData(0);
+                for (let i = 0; i < bufferSize; i++) {
+                    data[i] = Math.random() * 2 - 1;
+                }
+
+                const noise = audioCtx.createBufferSource();
+                noise.buffer = buffer;
+
+                const filter = audioCtx.createBiquadFilter();
+                filter.type = 'bandpass';
+                filter.frequency.value = 1350;
+                filter.Q.value = 1.3;
+
+                const gain = audioCtx.createGain();
+                gain.gain.setValueAtTime(0.01, audioCtx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.3, audioCtx.currentTime + 0.04);
+                gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.16);
+
+                noise.connect(filter);
+                filter.connect(gain);
+                gain.connect(audioCtx.destination);
+
+                noise.start();
+            } catch (e) {
+                // Audio synthesis fail-safe for browser restrictions
+            }
+        }
+
+        let currentLeafIndex = 0;
+        const leavesContainer = document.getElementById('leavesContainer');
+        const tocList = document.getElementById('tocList');
+        const totalLeaves = BOOK_DATA.length;
+        const leafElements = [];
+
+        function buildBookLeaves() {
+            leavesContainer.innerHTML = '';
+            tocList.innerHTML = '';
+
+            BOOK_DATA.forEach((data, index) => {
+                const leaf = document.createElement('div');
+                leaf.className = `book-leaf ${index === 0 ? 'cover-hard' : ''}`;
+                leaf.id = `leaf-${index}`;
+                leaf.style.zIndex = totalLeaves - index;
+
+                const front = document.createElement('div');
+                front.className = `leaf-page page-front ${index === 0 ? 'cover-hard' : ''}`;
+                front.innerHTML = `
+                    <div class="curl-shine"></div>
+                    ${data.render()}
+                    ${index > 0 ? `<div class="book-footer-line"><span>ص ${index}</span><span>العيش في حياة تخالف المألوف</span></div>` : ''}
+                `;
+
+                const back = document.createElement('div');
+                back.className = `leaf-page page-back ${index === 0 ? 'cover-hard' : ''}`;
+                back.innerHTML = `
+                    <div class="curl-shine"></div>
+                    <div class="page-scrollable flex flex-col justify-center items-center text-center opacity-30 pointer-events-none">
+                        <div class="w-12 h-12 rounded-full border border-amber-800/40 flex items-center justify-center font-['Aref_Ruqaa'] text-amber-900">❦</div>
+                    </div>
+                `;
+
+                leaf.appendChild(front);
+                leaf.appendChild(back);
+                leavesContainer.appendChild(leaf);
+                leafElements.push(leaf);
+
+                const item = document.createElement('button');
+                item.className = `w-full text-right py-2.5 px-3 rounded-lg flex items-center justify-between text-sm transition hover:bg-amber-100 ${index === 0 ? 'font-bold text-amber-900 bg-amber-50' : 'text-slate-800'}`;
+                item.onclick = () => {
+                    goToPage(index);
+                    toggleToc(false);
+                };
+                item.innerHTML = `
+                    <div class="flex items-center gap-2">
+                        <span class="w-5 h-5 rounded-full bg-amber-200 text-amber-900 text-xs flex items-center justify-center font-bold">${index + 1}</span>
+                        <span class="truncate">${data.title}</span>
+                    </div>
+                    <span class="text-xs text-amber-800/60">${data.subhead || ''}</span>
+                `;
+                tocList.appendChild(item);
+            });
+
+            updateBookState();
+        }
+
+        function updateBookState() {
+            leafElements.forEach((leaf, idx) => {
+                if (idx < currentLeafIndex) {
+                    leaf.classList.add('flipped');
+                    leaf.style.zIndex = idx + 1;
+                } else {
+                    leaf.classList.remove('flipped');
+                    leaf.style.zIndex = totalLeaves - idx;
+                }
+            });
+
+            document.getElementById('btnPrev').disabled = (currentLeafIndex === 0);
+            document.getElementById('btnNext').disabled = (currentLeafIndex === totalLeaves - 1);
+        }
+
+        function turnNext() {
+            if (currentLeafIndex < totalLeaves - 1) {
+                const leaf = leafElements[currentLeafIndex];
+                leaf.classList.add('curling');
+                playRealisticPageFlipSound();
+                currentLeafIndex++;
+                updateBookState();
+                setTimeout(() => leaf.classList.remove('curling'), 850);
+            }
+        }
+
+        function turnPrev() {
+            if (currentLeafIndex > 0) {
+                currentLeafIndex--;
+                const leaf = leafElements[currentLeafIndex];
+                leaf.classList.add('curling');
+                playRealisticPageFlipSound();
+                updateBookState();
+                setTimeout(() => leaf.classList.remove('curling'), 850);
+            }
+        }
+
+        function goToPage(targetIndex) {
+            if (targetIndex < 0 || targetIndex >= totalLeaves) return;
+            playRealisticPageFlipSound();
+            currentLeafIndex = targetIndex;
+            updateBookState();
+        }
+
+        function toggleToc(open) {
+            const drawer = document.getElementById('tocDrawer');
+            if (open) drawer.classList.add('open');
+            else drawer.classList.remove('open');
+        }
+
+        function toggleTheme() {
+            document.body.classList.toggle('mode-night');
+        }
+
+        const fontSizes = ['16px', '18px', '21px'];
+        let currentFontIdx = 1;
+        function adjustFont() {
+            currentFontIdx = (currentFontIdx + 1) % fontSizes.length;
+            document.documentElement.style.setProperty('--font-size', fontSizes[currentFontIdx]);
+        }
+
+        let startX = 0;
+        let startY = 0;
+        const stage = document.getElementById('bookStage');
+
+        stage.addEventListener('touchstart', (e) => {
+            startX = e.touches[0].clientX;
+            startY = e.touches[0].clientY;
+        }, { passive: true });
+
+        stage.addEventListener('touchend', (e) => {
+            const deltaX = e.changedTouches[0].clientX - startX;
+            const deltaY = e.changedTouches[0].clientY - startY;
+            if (Math.abs(deltaX) > 40 && Math.abs(deltaY) < 65) {
+                if (deltaX < 0) {
+                    turnNext();
+                } else {
+                    turnPrev();
+                }
+            }
+        }, { passive: true });
+
+        window.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowLeft') turnNext();
+            if (e.key === 'ArrowRight') turnPrev();
+        });
+
+        window.addEventListener('DOMContentLoaded', () => {
+            buildBookLeaves();
+        });
+    </script>
+</body>
+</html>
