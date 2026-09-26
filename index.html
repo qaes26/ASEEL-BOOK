@@ -235,31 +235,28 @@
             z-index: 10;
         }
 
-        /* حاوية الكتاب المزدوج بصفحتين المتقابلتين */
-        .book-spread-3d {
-            width: var(--book-w);
-            height: var(--book-h);
+        /* حاوية الكتاب المزدوج لشاشات الكمبيوتر والأجهزة اللوحية (Desktop Spread) */
+        .book-spread-3d.desktop-mode {
+            width: min(94vw, 1040px);
+            height: min(84vh, 760px);
             position: relative;
             transform-style: preserve-3d;
             transition: transform 0.85s cubic-bezier(0.25, 1, 0.35, 1);
         }
 
-        /* عندما يكون الكتاب مغلقاً عند الغلاف الأمامي: يتوسط الشاشة بشكل كتاب حقيقي */
-        .book-spread-3d.closed-front {
+        .book-spread-3d.desktop-mode.closed-front {
             transform: translate3d(25%, 0, 0);
         }
 
-        /* عندما يكون الكتاب مفتوحاً: يتوسط تماماً حول العمود الفقري */
-        .book-spread-3d.open-book {
+        .book-spread-3d.desktop-mode.open-book {
             transform: translate3d(0, 0, 0);
         }
 
-        /* عندما يغلق الكتاب عند الغلاف الخلفي */
-        .book-spread-3d.closed-back {
+        .book-spread-3d.desktop-mode.closed-back {
             transform: translate3d(-25%, 0, 0);
         }
 
-        /* العمود الفقري لوسط الكتاب وظلال التجليد */
+        /* العمود الفقري لوسط الكتاب على الكمبيوتر */
         .central-book-spine {
             position: absolute;
             top: 0;
@@ -273,19 +270,18 @@
             box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
         }
 
-        /* أوراق الكتاب ثلاثية الأبعاد (3D Leaves) */
+        /* أوراق الكتاب على الكمبيوتر (Desktop Leaves) */
         .leaf-sheet {
             position: absolute;
             width: 50%;
             height: 100%;
             left: 0;
-            transform-origin: right center; /* محور الدوران هو العمود الفقري في المنتصف */
+            transform-origin: right center;
             transform-style: preserve-3d;
             transition: transform 0.85s cubic-bezier(0.645, 0.045, 0.355, 1);
             will-change: transform, z-index;
         }
 
-        /* الورقة المقلوبة 180 درجة إلى اليمين */
         .leaf-sheet.flipped {
             transform: rotateY(180deg);
         }
@@ -294,7 +290,6 @@
             z-index: 120 !important;
         }
 
-        /* وجه وظهر الورقة (Front & Back Pages) */
         .page-sheet-face {
             position: absolute;
             inset: 0;
@@ -308,14 +303,12 @@
             border: 1px solid var(--border-subtle);
         }
 
-        /* الوجه الأمامي (يظهر على اليسار قبل التقليب) */
         .page-sheet-face.face-left-front {
             transform: rotateY(0deg);
             border-right: 1px solid rgba(0, 0, 0, 0.2);
             box-shadow: inset -22px 0 35px -12px var(--page-shadow-color), 0 8px 25px rgba(0, 0, 0, 0.25);
         }
 
-        /* الوجه الخلفي (يظهر على اليمين بعد التقليب 180 درجة) */
         .page-sheet-face.face-right-back {
             transform: rotateY(180deg);
             border-left: 1px solid rgba(0, 0, 0, 0.2);
@@ -323,7 +316,6 @@
             box-shadow: inset 22px 0 35px -12px var(--page-shadow-color), 0 8px 25px rgba(0, 0, 0, 0.25);
         }
 
-        /* غلاف الكتاب الأصلي ثلاثي الأبعاد */
         .cover-leaf-sheet .face-left-front.cover-face-style {
             background: #060910;
             padding: 0;
@@ -331,6 +323,128 @@
             border-radius: 12px 3px 3px 12px;
             box-shadow: 0 15px 45px rgba(0,0,0,0.9), 0 0 35px rgba(230, 197, 103, 0.3);
             border-right: 5px solid #04060b;
+        }
+
+        /* ========================================================
+           تصميم الكتاب ثلاثي الأبعاد المخصص للهواتف (Mobile 3D Book)
+           ======================================================== */
+        .book-spread-3d.mobile-mode {
+            width: min(92vw, 430px);
+            height: min(75vh, 660px);
+            position: relative;
+            transform-style: preserve-3d;
+            perspective: 2000px;
+            box-shadow: 
+                -2px 1px 0 #1b2234, 
+                -4px 3px 0 #151a28, 
+                -6px 5px 0 #0e121c, 
+                -12px 10px 35px rgba(0, 0, 0, 0.85);
+            border-radius: 14px 4px 4px 14px;
+            transition: none;
+        }
+
+        .book-spread-3d.mobile-mode .central-book-spine {
+            display: none !important;
+        }
+
+        /* شريط التجليد الأيمن في الهاتف */
+        .mobile-spine-binding {
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            right: 0;
+            width: 10px;
+            background: linear-gradient(to left, rgba(0,0,0,0.7) 0%, rgba(230, 197, 103, 0.35) 50%, rgba(0,0,0,0.5) 100%);
+            border-radius: 0 4px 4px 0;
+            z-index: 140;
+            pointer-events: none;
+            border-left: 1px solid rgba(230, 197, 103, 0.3);
+        }
+
+        /* شريط الفاصل القماشي الفاخر (Silk Ribbon Bookmark) */
+        .book-ribbon-marker {
+            position: absolute;
+            top: -3px;
+            right: 28px;
+            width: 22px;
+            height: 48px;
+            background: linear-gradient(135deg, #e6c567 0%, #b38926 100%);
+            clip-path: polygon(0 0, 100% 0, 100% 100%, 50% 80%, 0 100%);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.6);
+            z-index: 150;
+            pointer-events: none;
+            transition: all 0.35s ease;
+        }
+
+        .book-ribbon-marker.active {
+            background: linear-gradient(135deg, #f59e0b 0%, #dc2626 100%);
+            height: 58px;
+            box-shadow: 0 4px 18px rgba(245, 158, 11, 0.7);
+        }
+
+        /* أوراق الكتاب ثلاثية الأبعاد على الهاتف (صفحة كاملة مقروءة) */
+        .leaf-sheet-mobile {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            transform-origin: right center; /* المحور الأيمن عند كعب الكتاب العربي */
+            transform-style: preserve-3d;
+            transition: transform 0.75s cubic-bezier(0.25, 1, 0.35, 1);
+            will-change: transform, z-index;
+        }
+
+        .leaf-sheet-mobile.flipped {
+            transform: rotateY(180deg);
+        }
+
+        .leaf-sheet-mobile.turning {
+            z-index: 130 !important;
+        }
+
+        .leaf-sheet-mobile .face-front {
+            position: absolute;
+            inset: 0;
+            background-color: var(--page-bg);
+            border-radius: 12px 3px 3px 12px;
+            backface-visibility: hidden;
+            -webkit-backface-visibility: hidden;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            border: 1px solid var(--border-subtle);
+            border-right: 5px solid #060911;
+            box-shadow: inset -18px 0 25px -10px var(--page-shadow-color), 0 8px 30px rgba(0, 0, 0, 0.5);
+        }
+
+        .leaf-sheet-mobile .face-back {
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(circle at 50% 50%, #151a26 0%, #0a0c14 100%);
+            border-radius: 3px 12px 12px 3px;
+            transform: rotateY(180deg);
+            backface-visibility: hidden;
+            -webkit-backface-visibility: hidden;
+            border: 1px solid var(--border-subtle);
+            box-shadow: inset 18px 0 25px -10px var(--page-shadow-color), 0 8px 30px rgba(0, 0, 0, 0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .leaf-sheet-mobile .face-back::after {
+            content: "✦ ✦ ✦";
+            color: rgba(230, 197, 103, 0.25);
+            font-size: 1.4rem;
+            letter-spacing: 8px;
+            font-family: 'Aref Ruqaa', serif;
+        }
+
+        .leaf-sheet-mobile.cover-mobile .face-front {
+            padding: 0;
+            border: 2px solid rgba(230, 197, 103, 0.7);
+            border-right: 6px solid #04060b;
+            box-shadow: 0 15px 45px rgba(0,0,0,0.9), 0 0 35px rgba(230, 197, 103, 0.4);
         }
 
         .cover-image-container {
@@ -346,10 +460,9 @@
             object-fit: cover;
             display: block;
         }
-
         /* محتوى نصوص صفحات الكتاب الأدبية */
         .page-scroll-content {
-            padding: 32px 38px 25px 38px;
+            padding: 28px 30px 22px 30px;
             overflow-y: auto;
             overflow-x: hidden;
             flex-grow: 1;
@@ -367,24 +480,56 @@
             border-radius: 8px;
         }
 
-        /* استجابة شاشات الهواتف مع الحفاظ على شكل الكتاب */
+        /* تحسينات الشاشات والهواتف (Mobile Responsiveness) */
         @media (max-width: 768px) {
-            :root {
-                --book-w: 96vw;
-                --book-h: 78vh;
-                --font-size-base: 16px;
+            .app-top-header {
+                height: 48px;
+                padding: 0 10px;
+            }
+            .header-title-box {
+                max-width: 50%;
+                font-size: 0.82rem;
+            }
+            .music-chip-btn {
+                padding: 3px 8px;
+                font-size: 0.74rem;
             }
             .page-scroll-content {
-                padding: 18px 16px 16px 16px;
+                padding: 22px 18px 18px 22px;
             }
-            .book-spread-3d.closed-front {
-                transform: translate3d(24%, 0, 0) scale(0.96);
+            h2.book-h2 {
+                font-size: 1.55rem;
+                padding-bottom: 8px;
             }
-            .book-spread-3d.open-book {
-                transform: translate3d(0, 0, 0) scale(0.96);
+            h3.book-h3 {
+                font-size: 1.05rem;
+                margin: 6px 0 14px 0;
             }
-            .book-spread-3d.closed-back {
-                transform: translate3d(-24%, 0, 0) scale(0.96);
+            p.book-p {
+                font-size: 1.05rem;
+                line-height: 2.15;
+                margin-bottom: 14px;
+            }
+            .book-quote-box {
+                font-size: 0.95rem;
+                line-height: 2.0;
+                padding: 12px 14px;
+                margin: 14px 0;
+            }
+            .bottom-controls-dock {
+                bottom: 8px;
+                width: min(94vw, 430px);
+                padding: 5px 10px;
+                gap: 4px;
+            }
+            .dock-page-btn {
+                padding: 7px 12px;
+                font-size: 0.84rem;
+            }
+            .dock-round-btn {
+                width: 35px;
+                height: 35px;
+                font-size: 0.92rem;
             }
         }
 
@@ -1481,11 +1626,12 @@
         ];
 
         /* ========================================================
-           محرك الكتاب الحقيقي ثلاثي الأبعاد (Real 3D Book Engine)
+           محرك الكتاب ثلاثي الأبعاد المتكامل (الهواتف وشاشات الكمبيوتر)
            ======================================================== */
-        let currentLeafIndex = 0; // مؤشر الورقة ثلاثية الأبعاد
+        let currentPage = 0; // مؤشر الصفحة الحالية (0 إلى 25)
+        let isMobile = window.innerWidth <= 768;
         const totalPages = pagesData.length; // 26 صفحة
-        const totalLeaves = Math.ceil(totalPages / 2); // 13 ورقة
+        const totalLeaves = Math.ceil(totalPages / 2); // 13 ورقة لسطح المكتب
         const leafSheets = [];
 
         const bookSpread3D = document.getElementById('bookSpread3D');
@@ -1495,69 +1641,156 @@
         const dockNextBtn = document.getElementById('dockNextBtn');
         const tocItemsScroll = document.getElementById('tocItemsScroll');
 
-        function build3DRealBook() {
-            bookSpread3D.innerHTML = '<div class="central-book-spine"></div>';
+        function buildBook() {
+            isMobile = window.innerWidth <= 768;
             leafSheets.length = 0;
+            bookSpread3D.innerHTML = '';
 
-            for (let i = 0; i < totalLeaves; i++) {
-                const leaf = document.createElement('div');
-                leaf.className = 'leaf-sheet' + (i === 0 ? ' cover-leaf-sheet' : '');
-                leaf.id = 'leaf-sheet-' + i;
+            if (isMobile) {
+                // ==================== وضع الهاتف: كتاب ثلاثي الأبعاد بصفحة كاملة مقروءة بجمالية ====================
+                bookSpread3D.className = 'book-spread-3d mobile-mode';
 
-                // الوجه الأمامي (يظهر على اليسار قبل التقليب)
-                const frontIdx = i * 2;
-                const frontFace = document.createElement('div');
-                frontFace.className = 'page-sheet-face face-left-front' + (frontIdx === 0 ? ' cover-face-style' : '');
-                if (pagesData[frontIdx]) {
-                    frontFace.innerHTML = pagesData[frontIdx].html + (frontIdx > 0 ? `<div class="book-page-footer">${frontIdx}</div>` : '');
+                // شريط الفاصل القماشي الفاخر
+                const ribbon = document.createElement('div');
+                ribbon.className = 'book-ribbon-marker';
+                ribbon.id = 'bookRibbonMarker';
+                bookSpread3D.appendChild(ribbon);
+
+                // كعب التجليد الأيمن في الكتاب العربي
+                const spine = document.createElement('div');
+                spine.className = 'mobile-spine-binding';
+                bookSpread3D.appendChild(spine);
+
+                for (let i = 0; i < totalPages; i++) {
+                    const leaf = document.createElement('div');
+                    leaf.className = 'leaf-sheet-mobile' + (i === 0 ? ' cover-mobile' : '');
+                    leaf.id = 'leaf-mobile-' + i;
+
+                    // الوجه الأمامي (الصفحة المقروءة)
+                    const frontFace = document.createElement('div');
+                    frontFace.className = 'face-front';
+                    if (pagesData[i]) {
+                        frontFace.innerHTML = pagesData[i].html + (i > 0 ? `
+                            <div class="book-page-footer">
+                                <span style="opacity:0.6;">✦</span>
+                                <span style="margin:0 8px;">صفحة ${i} من ${totalPages - 1}</span>
+                                <span style="opacity:0.6;">✦</span>
+                            </div>` : '');
+                    }
+
+                    // الوجه الخلفي (ظهر الورقة المنثنية)
+                    const backFace = document.createElement('div');
+                    backFace.className = 'face-back';
+
+                    leaf.appendChild(frontFace);
+                    leaf.appendChild(backFace);
+                    bookSpread3D.appendChild(leaf);
+                    leafSheets.push(leaf);
                 }
 
-                // الوجه الخلفي (يظهر على اليمين بعد التقليب 180 درجة)
-                const backIdx = i * 2 + 1;
-                const backFace = document.createElement('div');
-                backFace.className = 'page-sheet-face face-right-back';
-                if (pagesData[backIdx]) {
-                    backFace.innerHTML = pagesData[backIdx].html + `<div class="book-page-footer">${backIdx}</div>`;
+                updateMobileView();
+            } else {
+                // ==================== وضع الكمبيوتر: صفحتان متقابلتان حول عمود فقري ====================
+                bookSpread3D.className = 'book-spread-3d desktop-mode';
+
+                const spine = document.createElement('div');
+                spine.className = 'central-book-spine';
+                bookSpread3D.appendChild(spine);
+
+                for (let i = 0; i < totalLeaves; i++) {
+                    const leaf = document.createElement('div');
+                    leaf.className = 'leaf-sheet' + (i === 0 ? ' cover-leaf-sheet' : '');
+                    leaf.id = 'leaf-sheet-' + i;
+
+                    const frontIdx = i * 2;
+                    const frontFace = document.createElement('div');
+                    frontFace.className = 'page-sheet-face face-left-front' + (frontIdx === 0 ? ' cover-face-style' : '');
+                    if (pagesData[frontIdx]) {
+                        frontFace.innerHTML = pagesData[frontIdx].html + (frontIdx > 0 ? `<div class="book-page-footer">${frontIdx}</div>` : '');
+                    }
+
+                    const backIdx = i * 2 + 1;
+                    const backFace = document.createElement('div');
+                    backFace.className = 'page-sheet-face face-right-back';
+                    if (pagesData[backIdx]) {
+                        backFace.innerHTML = pagesData[backIdx].html + `<div class="book-page-footer">${backIdx}</div>`;
+                    }
+
+                    leaf.appendChild(frontFace);
+                    leaf.appendChild(backFace);
+                    bookSpread3D.appendChild(leaf);
+                    leafSheets.push(leaf);
                 }
 
-                leaf.appendChild(frontFace);
-                leaf.appendChild(backFace);
-                bookSpread3D.appendChild(leaf);
-                leafSheets.push(leaf);
-
-                // توزيع طبقات العمق الافتراضية
-                leaf.style.zIndex = totalLeaves - i;
+                updateDesktopView();
             }
 
             renderTOC();
-            updateBook3DView();
         }
 
-        function updateBook3DView(turningLeafIdx = -1) {
-            // تحديث تموضع الكتاب الكلي في الفضاء ثلاثي الأبعاد
+        // تحديث واجهة الهاتف
+        function updateMobileView(turningIdx = -1) {
+            const activeData = pagesData[currentPage] || pagesData[0];
+            headerChapterName.textContent = activeData.title;
+
+            const progress = (currentPage / (totalPages - 1)) * 100;
+            progressFillLine.style.width = `${progress}%`;
+
+            dockPrevBtn.disabled = (currentPage === 0);
+            dockNextBtn.disabled = (currentPage >= totalPages - 1);
+
+            leafSheets.forEach((leaf, i) => {
+                const isFlipped = i < currentPage;
+
+                if (i === turningIdx) {
+                    leaf.classList.add('turning');
+                    setTimeout(() => leaf.classList.remove('turning'), 760);
+                }
+
+                if (isFlipped) {
+                    leaf.classList.add('flipped');
+                    leaf.style.zIndex = i + 1;
+                    leaf.style.pointerEvents = 'none';
+                } else if (i === currentPage) {
+                    leaf.classList.remove('flipped');
+                    leaf.style.zIndex = 100;
+                    leaf.style.pointerEvents = 'auto';
+                } else {
+                    leaf.classList.remove('flipped');
+                    leaf.style.zIndex = totalPages - i;
+                    leaf.style.pointerEvents = 'none';
+                }
+            });
+
+            highlightActiveTOC();
+            checkBookmarkActive();
+            localStorage.setItem('book_current_page', currentPage);
+        }
+
+        // تحديث واجهة الكمبيوتر
+        function updateDesktopView(turningLeafIdx = -1) {
+            const curLeaf = currentPage === 0 ? 0 : Math.floor((currentPage + 1) / 2);
+
             bookSpread3D.classList.remove('closed-front', 'open-book', 'closed-back');
-            if (currentLeafIndex === 0) {
+            if (curLeaf === 0) {
                 bookSpread3D.classList.add('closed-front');
-            } else if (currentLeafIndex >= totalLeaves) {
+            } else if (curLeaf >= totalLeaves) {
                 bookSpread3D.classList.add('closed-back');
             } else {
                 bookSpread3D.classList.add('open-book');
             }
 
-            // مؤشر الصفحة الحالية التقريبي للعناوين والتقدم
-            const activePageIdx = currentLeafIndex === 0 ? 0 : (currentLeafIndex * 2 - 1);
-            const activeData = pagesData[activePageIdx] || pagesData[0];
-
+            const activeData = pagesData[currentPage] || pagesData[0];
             headerChapterName.textContent = activeData.title;
-            const progress = (currentLeafIndex / totalLeaves) * 100;
+
+            const progress = (curLeaf / totalLeaves) * 100;
             progressFillLine.style.width = `${progress}%`;
 
-            dockPrevBtn.disabled = (currentLeafIndex === 0);
-            dockNextBtn.disabled = (currentLeafIndex >= totalLeaves);
+            dockPrevBtn.disabled = (curLeaf === 0);
+            dockNextBtn.disabled = (curLeaf >= totalLeaves);
 
-            // تطبيق دوران 180 درجة حول العمود الفقري وطبقات z-index بدقة تمنع أي اختفاء
             leafSheets.forEach((leaf, i) => {
-                const isFlipped = i < currentLeafIndex;
+                const isFlipped = i < curLeaf;
 
                 if (i === turningLeafIdx) {
                     leaf.classList.add('turning');
@@ -1577,35 +1810,64 @@
 
             highlightActiveTOC();
             checkBookmarkActive();
-            localStorage.setItem('book_leaf_idx_real', currentLeafIndex);
+            localStorage.setItem('book_current_page', currentPage);
         }
 
         function nextPage() {
-            if (currentLeafIndex < totalLeaves) {
-                playPaperSound();
-                const leafToFlip = currentLeafIndex;
-                currentLeafIndex++;
-                updateBook3DView(leafToFlip);
+            if (isMobile) {
+                if (currentPage < totalPages - 1) {
+                    playPaperSound();
+                    const turning = currentPage;
+                    currentPage++;
+                    updateMobileView(turning);
+                }
+            } else {
+                let curLeaf = currentPage === 0 ? 0 : Math.floor((currentPage + 1) / 2);
+                if (curLeaf < totalLeaves) {
+                    playPaperSound();
+                    const turning = curLeaf;
+                    curLeaf++;
+                    currentPage = curLeaf * 2 - 1;
+                    updateDesktopView(turning);
+                }
             }
         }
 
         function prevPage() {
-            if (currentLeafIndex > 0) {
-                playPaperSound();
-                currentLeafIndex--;
-                const leafToFlip = currentLeafIndex;
-                updateBook3DView(leafToFlip);
+            if (isMobile) {
+                if (currentPage > 0) {
+                    playPaperSound();
+                    currentPage--;
+                    updateMobileView(currentPage);
+                }
+            } else {
+                let curLeaf = currentPage === 0 ? 0 : Math.floor((currentPage + 1) / 2);
+                if (curLeaf > 0) {
+                    playPaperSound();
+                    curLeaf--;
+                    currentPage = curLeaf === 0 ? 0 : (curLeaf * 2 - 1);
+                    updateDesktopView(curLeaf);
+                }
             }
         }
 
-        function goToPage(targetPageIdx) {
+        function goToPage(targetIdx) {
             playPaperSound();
-            const targetLeaf = Math.floor((targetPageIdx + 1) / 2);
-            const flipping = targetLeaf > currentLeafIndex ? currentLeafIndex : targetLeaf;
-            currentLeafIndex = targetLeaf;
-            updateBook3DView(flipping);
+            currentPage = Math.max(0, Math.min(totalPages - 1, targetIdx));
+            if (isMobile) {
+                updateMobileView(currentPage);
+            } else {
+                updateDesktopView();
+            }
             closeTOC();
         }
+
+        window.addEventListener('resize', () => {
+            const mobileNow = window.innerWidth <= 768;
+            if (mobileNow !== isMobile) {
+                buildBook();
+            }
+        });
 
         /* ========================================================
            صوت حفيف وتقليب الورق الواقعي (Web Audio API)
@@ -1785,10 +2047,17 @@
         }
 
         function highlightActiveTOC() {
-            const curActivePage = currentLeafIndex === 0 ? 0 : (currentLeafIndex * 2 - 1);
             pagesData.forEach((_, idx) => {
                 const el = document.getElementById('toc-entry-' + idx);
-                if (el) el.classList.toggle('active', idx === curActivePage || idx === curActivePage + 1);
+                if (el) {
+                    if (isMobile) {
+                        el.classList.toggle('active', idx === currentPage);
+                    } else {
+                        const curLeaf = currentPage === 0 ? 0 : Math.floor((currentPage + 1) / 2);
+                        const p1 = curLeaf === 0 ? 0 : (curLeaf * 2 - 1);
+                        el.classList.toggle('active', idx === p1 || idx === p1 + 1);
+                    }
+                }
             });
         }
 
@@ -1846,28 +2115,35 @@
         }
 
         /* ========================================================
-           الإشارات المرجعية (Bookmarks)
+           الإشارات المرجعية وشريط القماش الفاخر (Bookmarks)
            ======================================================== */
         function toggleBookmark() {
-            const saved = localStorage.getItem('book_saved_leaf_real');
-            if (saved && parseInt(saved, 10) === currentLeafIndex) {
-                localStorage.removeItem('book_saved_leaf_real');
+            const saved = localStorage.getItem('book_saved_page');
+            const ribbon = document.getElementById('bookRibbonMarker');
+            if (saved && parseInt(saved, 10) === currentPage) {
+                localStorage.removeItem('book_saved_page');
                 document.getElementById('bookmarkBtn').classList.remove('active');
+                if (ribbon) ribbon.classList.remove('active');
                 showToast("تمت إزالة الإشارة المرجعية ✕");
             } else {
-                localStorage.setItem('book_saved_leaf_real', currentLeafIndex);
+                localStorage.setItem('book_saved_page', currentPage);
                 document.getElementById('bookmarkBtn').classList.add('active');
-                showToast(`تم حفظ الإشارة عند ورقة ${currentLeafIndex + 1} 🔖`);
+                if (ribbon) ribbon.classList.add('active');
+                showToast(`تم حفظ الإشارة عند صفحة ${currentPage === 0 ? 'الغلاف' : currentPage} 🔖`);
             }
         }
 
         function checkBookmarkActive() {
-            const saved = localStorage.getItem('book_saved_leaf_real');
+            const saved = localStorage.getItem('book_saved_page');
             const btn = document.getElementById('bookmarkBtn');
-            if (saved && parseInt(saved, 10) === currentLeafIndex) {
+            const ribbon = document.getElementById('bookRibbonMarker');
+            const isSaved = saved && parseInt(saved, 10) === currentPage;
+            if (isSaved) {
                 btn.classList.add('active');
+                if (ribbon) ribbon.classList.add('active');
             } else {
                 btn.classList.remove('active');
+                if (ribbon) ribbon.classList.remove('active');
             }
         }
 
@@ -1896,7 +2172,7 @@
                 return;
             }
 
-            const activeIdx = currentLeafIndex === 0 ? 0 : (currentLeafIndex * 2 - 1);
+            const activeIdx = currentPage;
             const temp = document.createElement('div');
             temp.innerHTML = pagesData[activeIdx] ? pagesData[activeIdx].html : '';
             const text = temp.textContent.replace(/\s+/g, ' ').trim();
@@ -1979,7 +2255,14 @@
            ======================================================== */
         window.addEventListener('DOMContentLoaded', () => {
             initMusicPlayer();
-            build3DRealBook();
+
+            // استعادة الصفحة المحفوظة
+            const savedPage = localStorage.getItem('book_current_page');
+            if (savedPage !== null) {
+                currentPage = parseInt(savedPage, 10);
+            }
+
+            buildBook();
 
             // استعادة الإعدادات المحفوظة
             const savedTheme = localStorage.getItem('book_theme') || 'dark';
@@ -1987,12 +2270,6 @@
 
             const savedFont = localStorage.getItem('book_font_size') || '18px';
             setFontSize(savedFont, savedFont === '16px' ? 'sm' : savedFont === '21px' ? 'lg' : savedFont === '24px' ? 'xl' : 'md');
-
-            const savedLeaf = localStorage.getItem('book_leaf_idx_real');
-            if (savedLeaf) {
-                currentLeafIndex = parseInt(savedLeaf, 10);
-                updateBook3DView();
-            }
 
             setTimeout(runTypewriterIntro, 400);
         });
